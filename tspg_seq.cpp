@@ -1,9 +1,16 @@
 #include <iostream>
 #include <fstream>
+#include <string>
+#include "src/datafuncs.hpp"
 #include "utils/argument_parser.hpp"
 #include "utils/utimer.hpp"
 
 using namespace std;
+using FloatMatrix = vector<vector<float>>;
+
+class GeneticAlgorithm (){
+    //
+}
 
 int main(int argc, char* argv[]) {
     int num_workers;
@@ -20,18 +27,12 @@ int main(int argc, char* argv[]) {
     }
 
     {
-        if (verbose) utimer t0("Time to write matrix: ");
-        std::ifstream inputFile(data_path);
+        if (verbose) utimer t0("Time to generate the distance matrix: ");
+        FloatMatrix distance_matrix = generate_distance_matrix(data_path);
 
-    std::string line;
-    while (std::getline(inputFile, line)) { // Read each line from the file
-        std::cout << line << std::endl; // Print the line to the console
-    }
-
-    inputFile.close(); /
     }   
     // construct the matrix
 
-    // implement the genetica algorithm
+    // implement the genetic algorithm
     return 0;
 }

@@ -21,7 +21,7 @@ public:
     TSPGenParNative(int route_length, const Matrix& distance_matrix, int population_size, int num_generations, int num_parents, GeneticTimer& timer, int num_workers)
         : route_length(route_length), distance_matrix(distance_matrix), population_size(population_size), num_generations(num_generations), num_parents(num_parents), timer(timer), num_workers(num_workers) {
     }
-
+    /*
     void initialize() {
         
         thread tids[num_workers];
@@ -35,7 +35,13 @@ public:
 
         population = mergeChunks(init_chunks);
 
-        if(population.size() != population_size) cout<<"error in init";
+        if(population.size() != population_size) cout<<"Error in initialization!"<<endl;
+    }
+    */
+
+    void initialize() {
+        population = initialize_population(population_size, route_length, gen);
+        evaluate_population(population, distance_matrix);
     }
 
     void evolve() {
@@ -155,6 +161,7 @@ int main(int argc, char* argv[]) {
     parseArguments(argc, argv, num_workers, track_time, population_size, num_generations, num_parents, data_path, verbose);
 
     if (num_workers > 1) parallel = true;
+    else parallel = false;
 
     if (verbose) {
     cout << "Number of workers: " << num_workers << endl;

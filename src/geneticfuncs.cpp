@@ -43,9 +43,7 @@ void evaluate_population(vector<Individual>& population, const Matrix& distance_
 vector<Individual> select_parents(const vector<Individual>& population, int num_parents, mt19937& gen) {
     vector<Individual> parents;
 
-    // Calculate total fitness (inverse of score) of the population
     double total_fitness = population_total_fitness(population);
-    // Initialize random number generator with seed
     uniform_real_distribution<double> dist(0.0, total_fitness);
 
     // Select parents using roulette wheel selection

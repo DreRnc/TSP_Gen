@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <algorithm>
 #include "src/distancefuncs.hpp"
 #include "utils/argumentparser.hpp"
 #include "utils/utimer.hpp"
@@ -75,8 +76,11 @@ int main(int argc, char* argv[]) {
     int num_workers, population_size, num_generations, num_parents;
     bool track_time, verbose;
     string data_path;
+    bool parallel;
 
     parseArguments(argc, argv, num_workers, track_time, population_size, num_generations, num_parents, data_path, verbose);
+
+    if (num_workers > 1) parallel = true;
 
     if (verbose) {
     cout << "Number of workers: " << num_workers << endl;
@@ -90,16 +94,18 @@ int main(int argc, char* argv[]) {
     int route_length = cities.size();
     const Matrix distance_matrix = generate_distance_matrix(cities);
     
-    GeneticTimer gentimer;
+    GeneticTimer gentimer(parallel);
     TSPGenSeq ga(route_length, distance_matrix, population_size, num_generations, num_parents, gentimer);
 
     gentimer.start();
     ga.initialize();
     gentimer.recordInitializationTime();
 
+    cout << "Best random route: " << ga.get_best().score << endl;
+
     ga.run();
 
-    Individual best = ga.get_best();
+    cout << "Best route after genetic alg: " << ga.get_best().score << endl;
 
     gentimer.writeTimesToFile("results/Times.txt");
 

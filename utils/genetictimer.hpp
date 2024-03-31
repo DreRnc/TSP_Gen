@@ -9,7 +9,7 @@
 class GeneticTimer {
 public:
     
-    GeneticTimer() {}
+    GeneticTimer(bool parallel) : parallel(parallel) {}
 
     void start_total() {
         start_total_time = std::chrono::steady_clock::now();
@@ -66,6 +66,12 @@ public:
         merge_time.push_back(elapsed_time);
     }
 
+    void recordOffspringParTime() {
+        stop();
+        auto elapsed_time = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+        offspringpar_time.push_back(elapsed_time);
+    }
+
     void recordTotalTime(){
         stop();
         total_time = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_total_time).count();
@@ -75,7 +81,7 @@ public:
         calculateAveragePhaseTimes();
         convertTimesTotalToPhase();
 
-        std::ofstream outfile(filename);
+        std::ofstream outfile(filename, std::ios::app);
 
         if (!outfile.is_open()) {
             std::cerr << "Error: Unable to open file " << filename << " for writing." << std::endl;
@@ -85,10 +91,16 @@ public:
         outfile << "----- Recording run times -----" << std::endl;
         outfile << "Initialization time: " << initialization_time << std::endl;
         outfile << "Selection average time: " << average_times[0] << std::endl;
-        outfile << "Crossover average time: " << average_times[1] << std::endl;
-        outfile << "Mutation average time: " << average_times[2] << std::endl;
-        outfile << "Evaluation average time: " << average_times[3] << std::endl;
-        outfile << "Merge average time: " << average_times[4] << std::endl;
+        if(!parallel){
+            outfile << "Crossover average time: " << average_times[1] << std::endl;
+            outfile << "Mutation average time: " << average_times[2] << std::endl;
+            outfile << "Evaluation average time: " << average_times[3] << std::endl;
+            outfile << "Merge average time: " << average_times[4] << std::endl;
+        }
+        else{
+            outfile << "Offspring average time: " << average_times[1] << std::endl;
+            outfile << "Merge average time: " << average_times[2] << std::endl;
+        }
         outfile << "\nTotal time: " << total_time << '\n' << std::endl;
 
         std::cout << "Time statistics of the run have been written to file " << filename << " successfully." << std::endl;
@@ -97,7 +109,9 @@ public:
     }
 
 
-private:
+private:    
+
+    bool parallel;
 
     long initialization_time;
     long total_time;
@@ -107,6 +121,7 @@ private:
     std::vector<long> mutation_time;
     std::vector<long> evaluation_time;
     std::vector<long> merge_time;
+    std::vector<long> offspringpar_time;
 
     std::vector<double> average_times;
 
@@ -124,9 +139,14 @@ private:
 
     void calculateAveragePhaseTimes() {
         average_times.push_back(calculateAverageTime(selection_time));
-        average_times.push_back(calculateAverageTime(crossover_time));
-        average_times.push_back(calculateAverageTime(mutation_time));
-        average_times.push_back(calculateAverageTime(evaluation_time));
+        if (!parallel){
+            average_times.push_back(calculateAverageTime(crossover_time));
+            average_times.push_back(calculateAverageTime(mutation_time));
+            average_times.push_back(calculateAverageTime(evaluation_time));
+        }
+        else {
+            average_times.push_back(calculateAverageTime(offspringpar_time));
+        }
         average_times.push_back(calculateAverageTime(merge_time));
     }
 
@@ -134,13 +154,19 @@ private:
         int num_generations = selection_time.size();
 
         for(int i = 0; i < num_generations; i++){
-            merge_time[i] = merge_time[i] - evaluation_time[i];
-            evaluation_time[i] = evaluation_time[i] - mutation_time[i];
-            mutation_time[i] = mutation_time[i] - crossover_time[i];
-            crossover_time[i] = crossover_time[i] - selection_time[i];
+            if (!parallel){
+                merge_time[i] = merge_time[i] - evaluation_time[i];
+                evaluation_time[i] = evaluation_time[i] - mutation_time[i];
+                mutation_time[i] = mutation_time[i] - crossover_time[i];
+                crossover_time[i] = crossover_time[i] - selection_time[i];
             }
-        
+            else {
+                merge_time[i] = merge_time[i] - offspringpar_time[i];
+                offspringpar_time[i] = offspringpar_time[i] - selection_time[i];
+            }
+        }
     }
 };
+
 
 #endif

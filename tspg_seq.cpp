@@ -13,9 +13,9 @@ using Matrix = vector<vector<double>>;
 unsigned int seed = 42;
 mt19937 gen(seed);
 
-class TSPGenSq {
+class TSPGenSeq {
 public:
-    TSPGenSq(int route_length, const Matrix& distance_matrix, int population_size, int num_generations, int num_parents, GeneticTimer& timer)
+    TSPGenSeq(int route_length, const Matrix& distance_matrix, int population_size, int num_generations, int num_parents, GeneticTimer& timer)
         : route_length(route_length), distance_matrix(distance_matrix), population_size(population_size), num_generations(num_generations), num_parents(num_parents), timer(timer) {
     }
 
@@ -27,28 +27,30 @@ public:
     void evolve() {
         cout << "Starting evolution!" << endl;
         timer.start();
+
         vector<Individual> parents = select_parents(population, num_parents, gen);
-        cout << "\tSelected parents!" << endl;
         timer.recordSelectionTime();
+
         vector<Individual> offspring = crossover_population(parents, gen);
-        cout << "\tCross!" << endl;
         timer.recordCrossoverTime();
+
         mutate(offspring, gen);
-        cout << "\tMutate!" << endl;
         timer.recordMutationTime();
+
         evaluate_population(offspring, distance_matrix);
-        cout << "\tEvaluate!" << endl;
         timer.recordEvaluationTime();
+
         merge(population, offspring, gen);
-        cout << "\tMerge!" << endl;
         timer.recordMergeTime();
     }
 
     void run() {
         timer.reset();
+        timer.start_total();
         for (int i = 0; i < num_generations; i++) {
             evolve();
         }
+        timer.recordTotalTime();
     }
 
     Individual get_best() {
@@ -89,13 +91,17 @@ int main(int argc, char* argv[]) {
     const Matrix distance_matrix = generate_distance_matrix(cities);
     
     GeneticTimer gentimer;
-    TSPGenSq ga(route_length, distance_matrix, population_size, num_generations, num_parents, gentimer);
+    TSPGenSeq ga(route_length, distance_matrix, population_size, num_generations, num_parents, gentimer);
+
     gentimer.start();
     ga.initialize();
     gentimer.recordInitializationTime();
-    cout << "Init time: " << gentimer.initialization_time << " usecs." << endl;
+
     ga.run();
+
     Individual best = ga.get_best();
+
+    gentimer.writeTimesToFile("results/Times.txt");
 
     return 0;
 }

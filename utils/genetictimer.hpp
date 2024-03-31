@@ -8,10 +8,12 @@
 
 class GeneticTimer {
 public:
-
-    long initialization_time;
     
     GeneticTimer() {}
+
+    void start_total() {
+        start_total_time = std::chrono::steady_clock::now();
+    }
 
     void start() {
         start_time = std::chrono::steady_clock::now();
@@ -64,30 +66,80 @@ public:
         merge_time.push_back(elapsed_time);
     }
 
-    std::vector<double> calculateAverageTimes() const {
-        std::vector<double> average_times;
-        average_times.push_back(calculateAverageTime(selection_time));
-        average_times.push_back(calculateAverageTime(crossover_time));
-        average_times.push_back(calculateAverageTime(mutation_time));
-        average_times.push_back(calculateAverageTime(evaluation_time));
-        average_times.push_back(calculateAverageTime(merge_time));
-        return average_times;
+    void recordTotalTime(){
+        stop();
+        total_time = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_total_time).count();
     }
 
+    void writeTimesToFile(const std::string& filename) {
+        calculateAveragePhaseTimes();
+        convertTimesTotalToPhase();
+
+        std::ofstream outfile(filename);
+
+        if (!outfile.is_open()) {
+            std::cerr << "Error: Unable to open file " << filename << " for writing." << std::endl;
+            return;
+        }
+
+        outfile << "----- Recording run times -----" << std::endl;
+        outfile << "Initialization time: " << initialization_time << std::endl;
+        outfile << "Selection average time: " << average_times[0] << std::endl;
+        outfile << "Crossover average time: " << average_times[1] << std::endl;
+        outfile << "Mutation average time: " << average_times[2] << std::endl;
+        outfile << "Evaluation average time: " << average_times[3] << std::endl;
+        outfile << "Merge average time: " << average_times[4] << std::endl;
+        outfile << "\nTotal time: " << total_time << '\n' << std::endl;
+
+        std::cout << "Time statistics of the run have been written to file " << filename << " successfully." << std::endl;
+
+        outfile.close();
+    }
+
+
 private:
+
+    long initialization_time;
+    long total_time;
+
     std::vector<long> selection_time;
     std::vector<long> crossover_time;
     std::vector<long> mutation_time;
     std::vector<long> evaluation_time;
     std::vector<long> merge_time;
+
+    std::vector<double> average_times;
+
+    std::chrono::steady_clock::time_point start_total_time;
     std::chrono::steady_clock::time_point start_time;
     std::chrono::steady_clock::time_point end_time;
 
-    double calculateAverageTime(const std::vector<long>& time_vector) const {
+
+    double calculateAverageTime(const std::vector<long>& time_vector) {
         if (time_vector.empty()) {
             return 0.0;
         }
         return static_cast<double>(std::accumulate(time_vector.begin(), time_vector.end(), 0)) / time_vector.size();
+    }
+
+    void calculateAveragePhaseTimes() {
+        average_times.push_back(calculateAverageTime(selection_time));
+        average_times.push_back(calculateAverageTime(crossover_time));
+        average_times.push_back(calculateAverageTime(mutation_time));
+        average_times.push_back(calculateAverageTime(evaluation_time));
+        average_times.push_back(calculateAverageTime(merge_time));
+    }
+
+    void convertTimesTotalToPhase(){
+        int num_generations = selection_time.size();
+
+        for(int i = 0; i < num_generations; i++){
+            merge_time[i] = merge_time[i] - evaluation_time[i];
+            evaluation_time[i] = evaluation_time[i] - mutation_time[i];
+            mutation_time[i] = mutation_time[i] - crossover_time[i];
+            crossover_time[i] = crossover_time[i] - selection_time[i];
+            }
+        
     }
 };
 

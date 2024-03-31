@@ -45,3 +45,45 @@ Offspring average time: 832028
 Merge average time: 851552
 
 Total time: 8516106
+
+# Experiment 2
+
+----- Recording run times -----
+Initialization time: 881933
+Selection average time: 1573.1
+Offspring average time: 6.64603e+06
+Merge average time: 6.69617e+06
+
+Total time: 66962506
+
+----- Recording run times -----
+Initialization time: 1277126
+Selection average time: 1412.8
+Offspring average time: 3.20879e+06
+Merge average time: 3.25277e+06
+
+Total time: 32528335
+
+----- Recording run times -----
+Initialization time: 1245606
+Selection average time: 1135.9
+Offspring average time: 1.98645e+06
+Merge average time: 2.0148e+06
+
+Total time: 20148637
+
+----- Recording run times -----
+Initialization time: 3195196
+Selection average time: 1323.3
+Offspring average time: 1.33231e+06
+Merge average time: 1.35684e+06
+
+Total time: 13569090
+
+----- Recording run times -----
+Initialization time: 890118
+Selection average time: 1148.7
+Offspring average time: 773557
+Merge average time: 793083
+
+Total time: 7931486

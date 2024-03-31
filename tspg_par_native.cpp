@@ -156,12 +156,9 @@ int main(int argc, char* argv[]) {
     int num_workers, population_size, num_generations, num_parents;
     bool track_time, verbose;
     string data_path;
-    bool parallel;
+    bool parallel = true;
 
     parseArguments(argc, argv, num_workers, track_time, population_size, num_generations, num_parents, data_path, verbose);
-
-    if (num_workers > 1) parallel = true;
-    else parallel = false;
 
     if (verbose) {
     cout << "Number of workers: " << num_workers << endl;

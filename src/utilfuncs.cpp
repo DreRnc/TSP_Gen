@@ -13,13 +13,12 @@ vector<int> generate_shuffled_sequence(const int n, mt19937& gen) {
     }
     cout <<'1'<<endl;
 
-    shuffle(sequence.begin(), sequence.end(), gen);
-    /*for (int i = n - 1; i > 0; --i) {
-        uniform_int_distribution<int> dist(0, i);
-        int j = dist(gen);
-        swap(sequence[i], sequence[j]);
-    }
-    */
-    cout <<'2'<<endl;
+    // Fisher Yates alg
+    for (int i = n - 1; i > 0; i--) 
+    {
+        int j = rand() % (i + 1); 
+        swap(sequence[i], sequence[j]); 
+    } 
+    
     return sequence;
 }

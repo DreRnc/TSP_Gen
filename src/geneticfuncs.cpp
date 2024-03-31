@@ -9,7 +9,6 @@ vector<Individual> initialize_population(int population_size, const int chr_leng
     vector<Individual> population(population_size);
     
     for (int i = 0; i < population_size; ++i) {
-        cout <<'1'<<endl;
         Individual& individual = population[i];
         individual.chr = generate_shuffled_sequence(chr_length, gen);
     }
@@ -46,7 +45,6 @@ vector<Individual> select_parents(const vector<Individual>& population, int num_
 
     // Calculate total fitness (inverse of score) of the population
     double total_fitness = population_total_fitness(population);
-    cout << total_fitness << endl;
     // Initialize random number generator with seed
     uniform_real_distribution<double> dist(0.0, total_fitness);
 
@@ -56,7 +54,6 @@ vector<Individual> select_parents(const vector<Individual>& population, int num_
         double accumulated_fitness = 0.0;
         for (const Individual& individual : population) {
             accumulated_fitness += 1.0 / individual.score;
-            cout << accumulated_fitness << endl;
             if (accumulated_fitness >= random_fitness) {
                 parents.push_back(individual);
                 break;

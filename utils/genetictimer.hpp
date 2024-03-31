@@ -8,6 +8,9 @@
 
 class GeneticTimer {
 public:
+
+    long initialization_time;
+    
     GeneticTimer() {}
 
     void start() {
@@ -26,6 +29,11 @@ public:
         merge_time.clear();
     }
 
+    void recordInitializationTime() {
+        stop();
+        auto elapsed_time = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+        initialization_time = elapsed_time;
+    }
     void recordSelectionTime() {
         stop();
         auto elapsed_time = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();

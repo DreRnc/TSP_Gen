@@ -91,10 +91,11 @@ int main(int argc, char* argv[]) {
     const Matrix distance_matrix = generate_distance_matrix(cities);
     
     GeneticTimer gentimer;
-    TSPGenSq ga(route_length, distance_matrix, population_size, num_generations, num_parents, gentimer); 
-    cout <<'1'<< endl;
+    TSPGenSq ga(route_length, distance_matrix, population_size, num_generations, num_parents, gentimer);
+    gentimer.start();
     ga.initialize();
-    cout <<'3'<< endl;
+    gentimer.recordInitializationTime();
+    cout << "Init time: " << gentimer.initialization_time << endl;
     ga.evolve();
     Individual best = ga.get_best();
 

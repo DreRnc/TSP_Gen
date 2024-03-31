@@ -5,7 +5,7 @@
 using namespace std;
 
 vector<Individual> initialize_population(int population_size, const int chr_length, mt19937& gen) {
-
+    
     vector<Individual> population(population_size);
     
     for (int i = 0; i < population_size; ++i) {

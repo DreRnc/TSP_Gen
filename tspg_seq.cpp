@@ -16,7 +16,7 @@ mt19937 gen(seed);
 class TSPGenSq {
 public:
     TSPGenSq(int route_length, const Matrix& distance_matrix, int population_size, int num_generations, int num_parents, GeneticTimer& timer)
-        : distance_matrix(distance_matrix), population_size(population_size), num_generations(num_generations), num_parents(num_parents), timer(timer) {
+        : route_length(route_length), distance_matrix(distance_matrix), population_size(population_size), num_generations(num_generations), num_parents(num_parents), timer(timer) {
     }
 
     void initialize() {
@@ -83,11 +83,9 @@ int main(int argc, char* argv[]) {
     cout << "Number of generations: " << num_generations << endl;
     cout << "Data path: " << data_path << endl;
     }
-
     
     vector<City> cities = generate_city_vector(data_path);
     int route_length = cities.size();
-    cout << route_length <<endl;
     const Matrix distance_matrix = generate_distance_matrix(cities);
     
     GeneticTimer gentimer;
@@ -95,8 +93,8 @@ int main(int argc, char* argv[]) {
     gentimer.start();
     ga.initialize();
     gentimer.recordInitializationTime();
-    cout << "Init time: " << gentimer.initialization_time << endl;
-    ga.evolve();
+    cout << "Init time: " << gentimer.initialization_time << " usecs." << endl;
+    ga.run();
     Individual best = ga.get_best();
 
     return 0;

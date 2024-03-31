@@ -55,9 +55,8 @@ public:
             tids[i].join();
         }
 
-        timer.recordOffspringParTime();
-
         vector<Individual> offspring = mergeChunks(offspring_chunks);
+        timer.recordOffspringParTime();
 
         merge(population, offspring, gen);
         timer.recordMergeTime();

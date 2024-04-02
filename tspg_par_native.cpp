@@ -70,12 +70,9 @@ public:
 
         vector<Individual> offspring = mergeChunks(offspring_chunks);
         timer.recordOffspringParTime();
-        cout << "Offspring size pre merge: " << offspring.size() << endl;
 
         merge(population, offspring, gen);
         timer.recordMergeTime();
-        cout << "Offspring size post merge: " << offspring.size() << endl;
-        cout << "Population size post merge: " << population.size() << endl;
 
     }
 
@@ -117,9 +114,7 @@ private:
 
         vector<Individual> chunk(parents.begin() + from, parents.begin() + to);
 
-        cout << "chunk size: " << chunk.size() << endl;
         vector<Individual> chunk_offspring = crossover_population(chunk, gen);
-        cout << "chunk offspring size: " << chunk_offspring.size() << endl;
         mutate(chunk_offspring, gen);
 
         evaluate_population(chunk_offspring, distance_matrix);

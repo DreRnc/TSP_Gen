@@ -29,9 +29,9 @@ void parseArguments(int argc,
                     bool& verbose) {
     num_workers = 1;
     track_time = false;
-    population_size = 1000;
-    num_generations = 10;
-    num_parents = 100;
+    population_size = 10000;
+    num_generations = 100;
+    num_parents = 1000;
     data_path = "data/italy.tsp";
     verbose = false;
 

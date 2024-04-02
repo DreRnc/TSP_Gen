@@ -69,7 +69,14 @@ vector<Individual> crossover_population(const vector<Individual>& population, mt
         children.push_back(child1);
         children.push_back(child2);
     }
-    return children;
+    // If the population is odd, cross the last one (which would be left out, with the first)
+    // Discard one of the two so that the offspring size is always 100 
+    // This last choice is mainly done to simply compare correctly the merge times
+    if (population.size() % 2){
+        auto [child1, _] = crossover(population[population.size()-1], population[0], gen);
+        children.push_back(child1);
+    }
+    return children; 
 }
 
 pair<Individual, Individual> crossover(const Individual& parent1, const Individual& parent2, mt19937& gen) {

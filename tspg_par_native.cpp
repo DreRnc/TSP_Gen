@@ -55,17 +55,28 @@ public:
         thread tids[num_workers];
 
         for(int i=0; i<num_workers; i++){
-            tids[i] = thread([this, parents, i](){ evolve_chunk(parents, i); });
+            tids[i] = thread([&, i](){ evolve_chunk(parents, i); });
         }
         for(int i=0; i<num_workers; i++){
             tids[i].join();
         }
 
+        int num = 0;
+        for (const auto& chunk : offspring_chunks) {
+            num+=1;
+            cout << "Offsrping num " << num << "size :" << chunk.size() << endl;
+        }
+
+
         vector<Individual> offspring = mergeChunks(offspring_chunks);
         timer.recordOffspringParTime();
+        cout << "Offspring size pre merge: " << offspring.size() << endl;
 
         merge(population, offspring, gen);
         timer.recordMergeTime();
+        cout << "Offspring size post merge: " << offspring.size() << endl;
+        cout << "Population size post merge: " << population.size() << endl;
+
     }
 
     void run() {
@@ -98,7 +109,7 @@ private:
     int num_workers;
     mutex m;
 
-    void evolve_chunk(vector<Individual> parents, int i){
+    void evolve_chunk(vector<Individual>& parents, int i){
         int delta = parents.size() / num_workers; 
         int from = i*delta;
         // if I'm the last one, take input.size(), else take (it1)*delta
@@ -106,8 +117,9 @@ private:
 
         vector<Individual> chunk(parents.begin() + from, parents.begin() + to);
 
+        cout << "chunk size: " << chunk.size() << endl;
         vector<Individual> chunk_offspring = crossover_population(chunk, gen);
-
+        cout << "chunk offspring size: " << chunk_offspring.size() << endl;
         mutate(chunk_offspring, gen);
 
         evaluate_population(chunk_offspring, distance_matrix);
@@ -179,13 +191,13 @@ int main(int argc, char* argv[]) {
     ga.initialize();
     gentimer.recordInitializationTime();
 
-    cout << "Best random route: " << ga.get_best().score << endl;
+    if(verbose) cout << "Best random route: " << ga.get_best().score << endl;
 
     ga.run();
 
-    cout << "Best route after genetic alg: " << ga.get_best().score << endl;
+    if(verbose) cout << "Best route after genetic alg: " << ga.get_best().score << endl;
 
-    gentimer.writeTimesToFile("results/Times.txt");
+    if(track_time) gentimer.writeTimesToFile("results/Times.txt");
 
     return 0;
 }

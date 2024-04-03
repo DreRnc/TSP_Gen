@@ -1,6 +1,6 @@
 # Common flags for both commands
 mkdir results/italy
-common_flags="-t -P 2000 -p 1000 -g 10 -d "data/italy.tsp""
+common_flags="-t -P 10000 -p 5000 -g 10 -d "data/italy.tsp""
 
 # Execute ./bin/tspg_seq
 flags="$common_flags -f "results/italy/time_seq.txt""
@@ -22,7 +22,7 @@ done
 for ((i = 2; i <= 64; i *= 2)) 
 do 
     # Concatenate common flags with the changing flags
-    flags="$common_flags -w $i -ds 5 -f "results/italy/time_dyn.txt""
+    flags="$common_flags -w $i -ds 20 -f "results/italy/time_dyn.txt""
     
     # Execute the command with the concatenated flags
     echo "Executing ./bin/tspg_par_native_dyn $flags"

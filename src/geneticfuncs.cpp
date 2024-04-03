@@ -4,7 +4,7 @@
 
 using namespace std;
 
-vector<Individual> initialize_population(int population_size, const int chr_length, mt19937& gen) {
+vector<Individual> initialize_population(const int population_size, const int chr_length, mt19937& gen) {
     
     vector<Individual> population(population_size);
     
@@ -153,59 +153,3 @@ void merge(vector<Individual>& population, vector<Individual>& offspring, mt1993
 
     population = merged_population;
 }
-
-
-/*
-vector<int> pmx(const vector<int>& parent1, const vector<int>& parent2, int cutPoint1, int cutPoint2) {
-
-    if (parent1.size() != parent2.size() || cutPoint1 < 0 || cutPoint2 < 0 ||
-        cutPoint1 >= parent1.size() || cutPoint2 >= parent1.size()) {
-        throw invalid_argument("Invalid input parameters.");
-    }
-
-    vector<int> child(parent1.size(), -1);
-
-    for (int i = cutPoint1; i <= cutPoint2; ++i) {
-        child[i] = parent1[i];
-    }
-
-    unordered_map<int, int> mapping;
-    for (int i = cutPoint1; i <= cutPoint2; ++i) {
-        mapping[parent1[i]] = parent2[i];
-    }
-
-    for (int i = 0; i < parent1.size(); ++i) {
-        if (i < cutPoint1 || i > cutPoint2) {
-            int current = parent2[i];
-            while (mapping.find(current) != mapping.end()) {
-                current = mapping[current];
-            }
-            child[i] = current;
-        }
-    }
-    return child;
-}
-
-// Function to perform PMX crossover and produce two children
-pair<vector<int>, vector<int>> pmxCrossover(const vector<int>& parent1, const vector<int>& parent2) {
-    int size = parent1.size();
-
-    // Randomly select cut points
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<int> dist(0, size - 1);
-    int cutPoint1 = dist(gen);
-    int cutPoint2 = dist(gen);
-
-    // Ensure cutPoint2 > cutPoint1
-    if (cutPoint1 > cutPoint2) {
-        swap(cutPoint1, cutPoint2);
-    }
-
-    // Perform PMX crossover to produce two children
-    vector<int> child1 = pmx(parent1, parent2, cutPoint1, cutPoint2);
-    vector<int> child2 = pmx(parent2, parent1, cutPoint1, cutPoint2);
-
-    return make_pair(child1, child2);
-}
-*/

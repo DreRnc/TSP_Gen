@@ -15,7 +15,7 @@ struct Individual{
 
 using Matrix = vector<vector<double>>;
 
-vector<Individual> initialize_population(int population_size, const int route_length, mt19937& gen);
+vector<Individual> initialize_population(const int population_size, const int route_length, mt19937& gen);
 void evaluate_population(vector<Individual>& population, const Matrix& distance_matrix);
 vector<Individual> select_parents(const vector<Individual>& population, int num_parents, mt19937& gen);
 Individual _cross(const Individual& parent1, const Individual& parent2, int cutpoint1, int cutpoint2, int size);

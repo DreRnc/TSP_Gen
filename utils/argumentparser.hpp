@@ -10,7 +10,7 @@ void printHelp() {
     std::cout << "Options:" << std::endl;
     std::cout << "  -w <num_workers>             Set the number of workers" << std::endl;
     std::cout << "  -t                           Enable tracking of time" << std::endl;
-    std::cout << "  -p <population_size>         Set the population size" << std::endl;
+    std::cout << "  -P <population_size>         Set the population size" << std::endl;
     std::cout << "  -g <num_generations>         Set the number of generations" << std::endl;
     std::cout << "  -p <num_parents>             Set the number of generations" << std::endl;
     std::cout << "  -d <data_path>               Set the data path (default: data/italy.tsp)" << std::endl;
@@ -44,7 +44,7 @@ void parseArguments(int argc,
             num_workers = std::atoi(argv[++i]);
         } else if (arg == "-t") {
             track_time = true;
-        } else if (arg == "-p" && i + 1 < argc) {
+        } else if (arg == "-P" && i + 1 < argc) {
             population_size = std::atoi(argv[++i]);
         } else if (arg == "-g" && i + 1 < argc) {
             num_generations = std::atoi(argv[++i]);

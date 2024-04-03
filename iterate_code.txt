@@ -1,5 +1,5 @@
 # Common flags for both commands
-common_flags="-t -P 100 -p 100 -g 10 -d "data/italy.tsp""
+common_flags="-t -P 10000 -p 20000 -g 10 -d "data/luxembourg.tsp""
 
 # Execute ./bin/tspg_seq
 flags=$common_flags -f "results/time_seq.txt"

@@ -29,16 +29,16 @@ void parseArguments(int argc,
                     bool& verbose) {
     num_workers = 1;
     track_time = false;
-    population_size = 10000;
-    num_generations = 100;
-    num_parents = 1000;
+    population_size = 5000;
+    num_generations = 10;
+    num_parents = 500;
     data_path = "data/italy.tsp";
     verbose = false;
 
     if(num_parents > population_size){
         std::cerr << "Cannot have num_population > population_size" << endl;
     }
-    for (int i = 1; i < argc; ++i) {
+    for (int i = 1; i < argc; ++i) { 
         std::string arg = argv[i];
         if (arg == "-w" && i + 1 < argc) {
             num_workers = std::atoi(argv[++i]);

@@ -22,18 +22,18 @@ obj/tspg_seq.o: tspg_seq.cpp src/distancefuncs.hpp src/geneticfuncs.hpp src/util
 	mkdir -p obj
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-obj/tspg_par_native.o: tspg_par_native.cpp src/distancefuncs.hpp src/geneticfuncs.hpp src/utilfuncs.hpp utils/argumentparser.hpp utils/genetictimer.hpp utils/utimer.hpp
+obj/tspg_par_native.o: tspg_par_native.cpp src/distancefuncs.hpp src/geneticfuncs.hpp src/utilfuncs.hpp utils/argumentparser.hpp utils/genetictimer.hpp utils/utimer.hpp src/utilfuncs.hpp
 	mkdir -p obj
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Linking
 bin/tspg_seq: obj/tspg_seq.o obj/distancefuncs.o obj/geneticfuncs.o obj/utilfuncs.o
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $^ -o $@ -pthread
 
 bin/tspg_par_native: obj/tspg_par_native.o obj/distancefuncs.o obj/geneticfuncs.o obj/utilfuncs.o
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $^ -o $@ -pthread
 
 # Clean
 clean:

@@ -5,6 +5,7 @@
 #include <vector>
 #include <chrono>
 #include <numeric>
+#include <tuple>
 
 class GeneticTimer {
 public:
@@ -100,12 +101,29 @@ public:
         else{
             outfile << "Offspring average time: " << average_times[1] << std::endl;
             outfile << "Merge average time: " << average_times[2] << std::endl;
+            outfile << "Load balancing:" << std::endl;
+            outfile << "Min load time among workers (average across generations): " << average_times[3] << std::endl;
+            outfile << "Max load time among workers (average across generations): " << average_times[4] << std::endl;
+            outfile << "Mean of load times among workers (average across generations): " << average_times[5] << std::endl;
+            outfile << "Std of load times among workers (average across generations): " << average_times[6] << std::endl;
+
         }
         outfile << "\nTotal time: " << total_time << '\n' << std::endl;
 
         std::cout << "Time statistics of the run have been written to file " << filename << " successfully." << std::endl;
 
         outfile.close();
+    }
+
+    void recordLoadBalanceStats(vector<tuple<long, long, long, long>> load_balancing){
+        for (auto elem : load_balancing){
+            long min, max, mean, std;
+            tie(min, max, mean, std) = elem;
+            min_loads.push_back(min);
+            max_loads.push_back(max);
+            mean_loads.push_back(mean);
+            std_loads.push_back(std);
+        }
     }
 
 
@@ -123,18 +141,23 @@ private:
     std::vector<long> merge_time;
     std::vector<long> offspringpar_time;
 
-    std::vector<double> average_times;
+    std::vector<long> average_times;
+    std::vector<long> min_loads;
+    std::vector<long> max_loads;
+    std::vector<long> mean_loads;
+    std::vector<long> std_loads;
 
     std::chrono::steady_clock::time_point start_total_time;
     std::chrono::steady_clock::time_point start_time;
     std::chrono::steady_clock::time_point end_time;
 
-
-    double calculateAverageTime(const std::vector<long>& time_vector) {
+    // Use integer division as we are not interested in decimals and numbers are very big, 
+    // doubles may not be able to represent them
+    long calculateAverageTime(const std::vector<long>& time_vector) {
         if (time_vector.empty()) {
             return 0.0;
         }
-        return static_cast<double>(std::accumulate(time_vector.begin(), time_vector.end(), 0)) / time_vector.size();
+        return std::accumulate(time_vector.begin(), time_vector.end(), 0) / time_vector.size();
     }
 
     void calculateAveragePhaseTimes() {
@@ -143,11 +166,16 @@ private:
             average_times.push_back(calculateAverageTime(crossover_time));
             average_times.push_back(calculateAverageTime(mutation_time));
             average_times.push_back(calculateAverageTime(evaluation_time));
+            average_times.push_back(calculateAverageTime(merge_time));
         }
         else {
             average_times.push_back(calculateAverageTime(offspringpar_time));
+            average_times.push_back(calculateAverageTime(merge_time));
+            average_times.push_back(calculateAverageTime(min_loads));
+            average_times.push_back(calculateAverageTime(max_loads));
+            average_times.push_back(calculateAverageTime(mean_loads));
+            average_times.push_back(calculateAverageTime(std_loads));
         }
-        average_times.push_back(calculateAverageTime(merge_time));
     }
 
     void convertTimesTotalToPhase(){

@@ -8,6 +8,7 @@
 #include "utils/argumentparser.hpp"
 #include "utils/utimer.hpp"
 #include "src/geneticfuncs.hpp"
+#include "src/utilfuncs.hpp"
 #include "utils/genetictimer.hpp"
 
 using namespace std;
@@ -27,7 +28,7 @@ public:
         thread tids[num_workers];
 
         for(int i=0; i<num_workers; i++){
-            tids[i] = thread([this, i](){ initialize_chunk(i); });
+            tids[i] = thread([&, i](){ initialize_chunk(i); });
         }
         for(int i=0; i<num_workers; i++){
             tids[i].join();
@@ -53,6 +54,7 @@ public:
         offspring_chunks.clear();
 
         thread tids[num_workers];
+        fill(time_loads.begin(), time_loads.end(), 0);
 
         for(int i=0; i<num_workers; i++){
             tids[i] = thread([&, i](){ evolve_chunk(parents, i); });
@@ -61,28 +63,26 @@ public:
             tids[i].join();
         }
 
-        int num = 0;
-        for (const auto& chunk : offspring_chunks) {
-            num+=1;
-            cout << "Offsrping num " << num << "size :" << chunk.size() << endl;
-        }
-
+        tuple<long, long, long, long> stats = vec_stats(time_loads);
+        load_balancing_stats.push_back(stats);
 
         vector<Individual> offspring = mergeChunks(offspring_chunks);
         timer.recordOffspringParTime();
 
         merge(population, offspring, gen);
         timer.recordMergeTime();
-
     }
 
     void run() {
+        time_loads.resize(num_workers);
         timer.reset();
         timer.start_total();
         for (int i = 0; i < num_generations; i++) {
+            cout << "Starting evolution: " << i << endl;
             evolve();
         }
         timer.recordTotalTime();
+        timer.recordLoadBalanceStats(load_balancing_stats);
     }
 
     Individual get_best() {
@@ -104,9 +104,12 @@ private:
     vector<vector<Individual>> init_chunks;
     GeneticTimer& timer;
     int num_workers;
+    vector<tuple<long,long,long,long>> load_balancing_stats;
+    vector<long> time_loads;
     mutex m;
 
     void evolve_chunk(vector<Individual>& parents, int i){
+        START(start);
         int delta = parents.size() / num_workers; 
         int from = i*delta;
         // if I'm the last one, take input.size(), else take (it1)*delta
@@ -119,9 +122,11 @@ private:
 
         evaluate_population(chunk_offspring, distance_matrix);
 
-        // Lock when pushing in the global vector of evolved chunks
+        // Lock when pushing in the global vector of evolved chunks and timings
         unique_lock chunk_lock(m);
         offspring_chunks.push_back(chunk_offspring);
+        STOP(start, worker_time);
+        time_loads[i] = worker_time;
     }
 
     void initialize_chunk(int i){

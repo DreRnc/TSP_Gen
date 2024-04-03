@@ -18,11 +18,9 @@ vector<Individual> initialize_population(const int population_size, const int ch
 }
 
 double population_total_fitness(const vector<Individual>& population){
-    double total_fitness = 0.0;
-    for (const Individual& individual : population) {
-        total_fitness += 1.0 / individual.score;
-    }
-    return total_fitness;
+    return accumulate(population.begin(), population.end(), 0.0, [](double total, const Individual& individual) {
+                               return total + individual.fitness;
+                           });
 }
 
 void evaluate_population(vector<Individual>& population, const Matrix& distance_matrix) {
@@ -47,7 +45,6 @@ vector<Individual> select_parents(const vector<Individual>& population, int num_
     double total_fitness = population_total_fitness(population);
     uniform_real_distribution<double> dist(0.0, total_fitness);
 
-    // Select parents using roulette wheel selection
     while (parents.size() < num_parents) {
         double random_fitness = dist(gen);
         double accumulated_fitness = 0.0;

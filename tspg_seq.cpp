@@ -26,7 +26,6 @@ public:
     }
 
     void evolve() {
-        cout << "Starting evolution!" << endl;
         timer.start();
 
         vector<Individual> parents = select_parents(population, num_parents, gen);
@@ -49,6 +48,7 @@ public:
         timer.reset();
         timer.start_total();
         for (int i = 0; i < num_generations; i++) {
+            cout << "Starting evolution: " << i << endl;
             evolve();
         }
         timer.recordTotalTime();
@@ -76,11 +76,11 @@ int main(int argc, char* argv[]) {
     int num_workers, population_size, num_generations, num_parents;
     bool track_time, verbose;
     string data_path;
-    bool parallel;
+    bool parallel = false;
 
     parseArguments(argc, argv, num_workers, track_time, population_size, num_generations, num_parents, data_path, verbose);
 
-    if (num_workers > 1) parallel = true;
+    num_workers = 1;
 
     if (verbose) {
     cout << "Number of workers: " << num_workers << endl;
@@ -101,13 +101,13 @@ int main(int argc, char* argv[]) {
     ga.initialize();
     gentimer.recordInitializationTime();
 
-    cout << "Best random route: " << ga.get_best().score << endl;
+    if(verbose) cout << "Best random route: " << ga.get_best().score << endl;
 
     ga.run();
 
-    cout << "Best route after genetic alg: " << ga.get_best().score << endl;
+    if(verbose) cout << "Best route after genetic alg: " << ga.get_best().score << endl;
 
-    gentimer.writeTimesToFile("results/Times.txt");
+    if(track_time) gentimer.writeTimesToFile("results/Times.txt", num_workers);
 
     return 0;
 }

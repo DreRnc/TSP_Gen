@@ -31,7 +31,7 @@ void parseArguments(int argc,
     track_time = false;
     population_size = 5000;
     num_generations = 10;
-    num_parents = 500;
+    num_parents = 2500;
     data_path = "data/italy.tsp";
     verbose = false;
 

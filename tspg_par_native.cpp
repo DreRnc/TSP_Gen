@@ -197,7 +197,7 @@ int main(int argc, char* argv[]) {
 
     if(verbose) cout << "Best route after genetic alg: " << ga.get_best().score << endl;
 
-    if(track_time) gentimer.writeTimesToFile("results/Times.txt");
+    if(track_time) gentimer.writeTimesToFile("results/Times.txt", num_workers);
 
     return 0;
 }

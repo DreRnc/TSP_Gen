@@ -1,3 +1,0 @@
-./bin/tspg_seq -t
-for ((i = 2; i <= 64; i *= 2)); do 
-	./bin/tspg_par_native -t -w $i; done

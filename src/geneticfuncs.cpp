@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "geneticfuncs.hpp"
 #include "utilfuncs.hpp"
 
@@ -138,14 +139,15 @@ void mutate(vector<Individual>& population, mt19937& gen) {
 
 void merge(vector<Individual>& population, vector<Individual>& offspring, mt19937& gen) {
     int population_size = population.size();
+    
+    vector<Individual> merged_population;
+    merged_population.reserve(population_size + offspring.size());
 
     population.insert(population.end(), offspring.begin(), offspring.end());
 
     sort(population.begin(), population.end(), [](const Individual& a, const Individual& b) {
         return a.fitness > b.fitness;
     });
-
-    vector<Individual> merged_population;
 
     for (int i = 0; i < population_size; ++i) {
         merged_population.push_back(population[i]);

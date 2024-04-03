@@ -78,7 +78,7 @@ public:
         total_time = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_total_time).count();
     }
 
-    void writeTimesToFile(const std::string& filename) {
+    void writeTimesToFile(const std::string& filename, int num_workers) {
         calculateAveragePhaseTimes();
         convertTimesTotalToPhase();
 
@@ -90,6 +90,7 @@ public:
         }
 
         outfile << "----- Recording run times -----" << std::endl;
+        outfile << "Number of workers: " << num_workers << std::endl;
         outfile << "Initialization time: " << initialization_time << std::endl;
         outfile << "Selection average time: " << average_times[0] << std::endl;
         if(!parallel){

@@ -16,6 +16,7 @@ void printHelp() {
     std::cout << "  -d <data_path>               Set the data path (default: data/italy.tsp)" << std::endl;
     std::cout << "  -f <file_path>               Set the path to write times (default: results/Times.txt)" << std::endl;
     std::cout << "  -v                           Verbose: print extra information" << std::endl;
+    std::cout << "  -v                           Size of dynamic chunks (dynamic program only)" << std::endl;
     std::cout << "  -h                           Print this help message" << std::endl;
 }
 
@@ -62,6 +63,9 @@ void parseArguments(int argc,
         } else if (arg == "-h") {
             printHelp();
             exit(0);
+        } else if (arg == "-ds") {
+            ++i;
+            continue;
         } else {
             std::cerr << "Error: Unknown option or missing argument: " << arg << std::endl;
             printHelp();

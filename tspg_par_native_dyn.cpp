@@ -45,8 +45,9 @@ private:
     
 class TSPGenParNativeDyn {
 public:
-    TSPGenParNativeDyn(int route_length, const Matrix& distance_matrix, int population_size, int num_generations, int num_parents, GeneticTimer& timer, int num_workers)
-        : route_length(route_length), distance_matrix(distance_matrix), population_size(population_size), num_generations(num_generations), num_parents(num_parents), timer(timer), num_workers(num_workers) {
+    TSPGenParNativeDyn(int route_length, const Matrix& distance_matrix, int population_size, int num_generations, int num_parents, GeneticTimer& timer, int num_workers, int dyn_chunk_size)
+        : route_length(route_length), distance_matrix(distance_matrix), population_size(population_size), num_generations(num_generations), num_parents(num_parents), 
+        timer(timer), num_workers(num_workers), dyn_chunk_size(dyn_chunk_size){
     }
     /*
     void initialize() {
@@ -151,8 +152,6 @@ private:
     vector<long> time_loads;
     mutex m;
 
-
-
     void evolve_chunk(vector<Individual>& parents_chunk){
 
         vector<Individual> chunk_offspring = crossover_population(parents_chunk, gen);
@@ -201,13 +200,21 @@ private:
 };
 
 int main(int argc, char* argv[]) {
-    int num_workers, population_size, num_generations, num_parents;
+    int num_workers, population_size, num_generations, num_parents, dyn_chunk_size;
     bool track_time, verbose;
     string data_path, file_path;
     bool parallel = true;
 
     parseArguments(argc, argv, num_workers, track_time, population_size, num_generations, num_parents, data_path, file_path, verbose);
 
+    // Add a parsing argument for the size of dynamic chunks
+    for (int i = 1; i < argc; ++i) { 
+        std::string arg = argv[i];
+        if (arg == "-ds") {
+            dyn_chunk_size = std::atoi(argv[++i]);
+        }
+    }
+    
     if (verbose) {
     cout << "Number of workers: " << num_workers << endl;
     cout << "Track time: " << (track_time ? "Yes" : "No") << endl;
@@ -219,9 +226,9 @@ int main(int argc, char* argv[]) {
     vector<City> cities = generate_city_vector(data_path);
     int route_length = cities.size();
     const Matrix distance_matrix = generate_distance_matrix(cities);
-    
+
     GeneticTimer gentimer(parallel);
-    TSPGenParNativeDyn ga(route_length, distance_matrix, population_size, num_generations, num_parents, gentimer, num_workers);
+    TSPGenParNativeDyn ga(route_length, distance_matrix, population_size, num_generations, num_parents, gentimer, num_workers, dyn_chunk_size);
 
     gentimer.start();
     ga.initialize();

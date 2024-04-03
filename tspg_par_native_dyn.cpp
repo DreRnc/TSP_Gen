@@ -4,6 +4,7 @@
 #include <thread>
 #include <mutex>
 #include <algorithm>
+#include <queue>
 #include "src/distancefuncs.hpp"
 #include "utils/argumentparser.hpp"
 #include "utils/utimer.hpp"
@@ -44,7 +45,7 @@ private:
     
 class TSPGenParNativeDyn {
 public:
-    TSPGenParNative(int route_length, const Matrix& distance_matrix, int population_size, int num_generations, int num_parents, GeneticTimer& timer, int num_workers)
+    TSPGenParNativeDyn(int route_length, const Matrix& distance_matrix, int population_size, int num_generations, int num_parents, GeneticTimer& timer, int num_workers)
         : route_length(route_length), distance_matrix(distance_matrix), population_size(population_size), num_generations(num_generations), num_parents(num_parents), timer(timer), num_workers(num_workers) {
     }
     /*
@@ -78,53 +79,32 @@ public:
 
         offspring_chunks.clear();
 
-        DynamicChunks task_pool();
+        DynamicChunks task_pool;
         thread tids[num_workers];
 
         for (size_t i = 0; i < parents.size(); i += dyn_chunk_size) {
             vector<Individual>::iterator last = parents.begin() + min(i + dyn_chunk_size, parents.size());
             vector<Individual> chunk(parents.begin() + i, last);
-            task_pool.enqueue(move(chunk));
+            task_pool.enqueue(std::move(chunk));
         }
 
         for(int i=0; i<num_workers; i++){
-            tids[i] = thread([&](){ 
+            tids[i] = thread([&, i](){ 
+                START(start)
                 while (true) {
                     vector<Individual> chunk = task_pool.get_chunk();
                     if (chunk.empty()) break;
                     evolve_chunk(chunk);
                 }
+                STOP(start, worker_time);
+                unique_lock chunk_lock(m);
+                time_loads[i] = worker_time;
             });
         }
 
         for(int i=0; i<num_workers; i++){
             tids[i].join();
         }
-
-        timer.recordOffspringParTime();
-
-        merge(population, offspring, gen);
-        timer.recordMergeTime();
-    }
-
-    void evolve() {
-        timer.start();
-
-        vector<Individual> parents = select_parents(population, num_parents, gen);
-        timer.recordSelectionTime();
-
-        offspring_chunks.clear();
-
-        thread tids[num_workers];
-        fill(time_loads.begin(), time_loads.end(), 0);
-
-        for(int i=0; i<num_workers; i++){
-            tids[i] = thread([&, i](){ evolve_chunk(parents, i); });
-        }
-        for(int i=0; i<num_workers; i++){
-            tids[i].join();
-        }
-
         tuple<long, long, long, long> stats = vec_stats(time_loads);
         load_balancing_stats.push_back(stats);
 
@@ -174,7 +154,6 @@ private:
 
 
     void evolve_chunk(vector<Individual>& parents_chunk){
-        START(start);
 
         vector<Individual> chunk_offspring = crossover_population(parents_chunk, gen);
         mutate(chunk_offspring, gen);
@@ -184,8 +163,6 @@ private:
         // Lock when pushing in the global vector of evolved chunks and timings
         unique_lock chunk_lock(m);
         offspring_chunks.push_back(chunk_offspring);
-        STOP(start, worker_time);
-        time_loads[i] = worker_time;
     }
 
     void initialize_chunk(int i){
@@ -226,10 +203,10 @@ private:
 int main(int argc, char* argv[]) {
     int num_workers, population_size, num_generations, num_parents;
     bool track_time, verbose;
-    string data_path;
+    string data_path, file_path;
     bool parallel = true;
 
-    parseArguments(argc, argv, num_workers, track_time, population_size, num_generations, num_parents, data_path, verbose);
+    parseArguments(argc, argv, num_workers, track_time, population_size, num_generations, num_parents, data_path, file_path, verbose);
 
     if (verbose) {
     cout << "Number of workers: " << num_workers << endl;
@@ -244,7 +221,7 @@ int main(int argc, char* argv[]) {
     const Matrix distance_matrix = generate_distance_matrix(cities);
     
     GeneticTimer gentimer(parallel);
-    TSPGenParNative ga(route_length, distance_matrix, population_size, num_generations, num_parents, gentimer, num_workers);
+    TSPGenParNativeDyn ga(route_length, distance_matrix, population_size, num_generations, num_parents, gentimer, num_workers);
 
     gentimer.start();
     ga.initialize();
@@ -256,7 +233,7 @@ int main(int argc, char* argv[]) {
 
     if(verbose) cout << "Best route after genetic alg: " << ga.get_best().score << endl;
 
-    if(track_time) gentimer.writeTimesToFile("results/Times.txt");
+    if(track_time) gentimer.writeTimesToFile(file_path, num_workers);
 
     return 0;
 }

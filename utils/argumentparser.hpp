@@ -14,6 +14,7 @@ void printHelp() {
     std::cout << "  -g <num_generations>         Set the number of generations" << std::endl;
     std::cout << "  -p <num_parents>             Set the number of generations" << std::endl;
     std::cout << "  -d <data_path>               Set the data path (default: data/italy.tsp)" << std::endl;
+    std::cout << "  -f <file_path>               Set the path to write times (default: results/Times.txt)" << std::endl;
     std::cout << "  -v                           Verbose: print extra information" << std::endl;
     std::cout << "  -h                           Print this help message" << std::endl;
 }
@@ -26,6 +27,7 @@ void parseArguments(int argc,
                     int& num_generations,
                     int& num_parents,
                     std::string& data_path,
+                    std::string& file_path,
                     bool& verbose) {
     num_workers = 1;
     track_time = false;
@@ -33,6 +35,7 @@ void parseArguments(int argc,
     num_generations = 10;
     num_parents = 2500;
     data_path = "data/italy.tsp";
+    file_path = "results/Times.txt";
     verbose = false;
 
     if(num_parents > population_size){
@@ -52,6 +55,8 @@ void parseArguments(int argc,
             num_parents = std::atoi(argv[++i]);
         } else if (arg == "-d" && i + 1 < argc) {
             data_path = argv[++i];
+        } else if (arg == "-f" && i + 1 < argc) {
+            file_path = argv[++i];
         } else if (arg == "-v") {
             verbose = true;
         } else if (arg == "-h") {

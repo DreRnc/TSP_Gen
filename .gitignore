@@ -3,3 +3,5 @@ data
 .vscode
 obj
 bin
+images
+.venv

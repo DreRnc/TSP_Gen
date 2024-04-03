@@ -75,10 +75,10 @@ private:
 int main(int argc, char* argv[]) {
     int num_workers, population_size, num_generations, num_parents;
     bool track_time, verbose;
-    string data_path;
+    string data_path, file_path;
     bool parallel = false;
 
-    parseArguments(argc, argv, num_workers, track_time, population_size, num_generations, num_parents, data_path, verbose);
+    parseArguments(argc, argv, num_workers, track_time, population_size, num_generations, num_parents, data_path, file_path, verbose);
 
     num_workers = 1;
 
@@ -107,7 +107,7 @@ int main(int argc, char* argv[]) {
 
     if(verbose) cout << "Best route after genetic alg: " << ga.get_best().score << endl;
 
-    if(track_time) gentimer.writeTimesToFile("results/Times.txt", num_workers);
+    if(track_time) gentimer.writeTimesToFile(file_path, num_workers);
 
     return 0;
 }

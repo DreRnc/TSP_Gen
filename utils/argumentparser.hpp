@@ -63,7 +63,7 @@ void parseArguments(int argc,
         } else if (arg == "-h") {
             printHelp();
             exit(0);
-        } else if (arg == "-ds") {
+        } else if (arg == "-ds" && i + 1 < argc) {
             ++i;
             continue;
         } else {

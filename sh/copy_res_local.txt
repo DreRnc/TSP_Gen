@@ -1,0 +1,1 @@
+scp -r a.roncoli@131.114.51.113:/home/a.roncoli/TSP_Gen/results .

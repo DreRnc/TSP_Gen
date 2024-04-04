@@ -56,7 +56,6 @@ vector<Individual> select_parents(const vector<Individual>& population, const in
             }
         }
     }
-
     return parents;
 }
 
@@ -134,11 +133,8 @@ void mutate(vector<Individual>& population, mt19937& gen) {
     }
 }
 
-void merge(vector<Individual>& population, vector<Individual>& offspring, mt19937& gen) {
+void merge(vector<Individual>& population, const vector<Individual>& offspring) {
     int population_size = population.size();
-    
-    vector<Individual> merged_population;
-    merged_population.reserve(population_size + offspring.size());
 
     population.insert(population.end(), offspring.begin(), offspring.end());
 
@@ -146,9 +142,5 @@ void merge(vector<Individual>& population, vector<Individual>& offspring, mt1993
         return a.fitness > b.fitness;
     });
 
-    for (int i = 0; i < population_size; ++i) {
-        merged_population.push_back(population[i]);
-    }
-
-    population = merged_population;
+    population = vector<Individual>(population.begin(), population.begin() + population_size);
 }

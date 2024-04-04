@@ -8,4 +8,3 @@ Evaluation average time: 1608086
 Merge average time: 1631112
 
 Total time: 16319270
-

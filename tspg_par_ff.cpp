@@ -65,7 +65,7 @@ const Individual& evolution(Individual& individual, const TSPGenEnv& env, const 
 }
 
 vector<Individual> _merge(vector<Individual>& population, vector<Individual>& offspring){
-    merge(population, offspring, gen);
+    merge(population, offspring);
     return population;
 }
 

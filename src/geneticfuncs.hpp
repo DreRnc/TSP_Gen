@@ -22,6 +22,6 @@ Individual _cross(const Individual& parent1, const Individual& parent2, const in
 pair<Individual, Individual> crossover(const Individual& parent1, const Individual& parent2, mt19937& gen);
 vector<Individual> crossover_population(const vector<Individual>& population, mt19937& gen);
 void mutate(vector<Individual>& population, mt19937& gen);
-void merge(vector<Individual>& population, vector<Individual>& offspring, mt19937& gen);
+void merge(vector<Individual>& population, const vector<Individual>& offspring);
 
 #endif

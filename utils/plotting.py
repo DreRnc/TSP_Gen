@@ -70,7 +70,7 @@ def plot_load_imbalance(country, mode = 'std'):
         read_imbalance = read_imbalance_std
     elif mode == 'maxmin':
         read_imbalance = read_imbalance_maxmin
-        
+
     num_workers_stat, load_imbalances_stat = read_imbalance(path + f'/results/{country}/time_stat.txt')
     num_workers_dyn, load_imbalances_dyn = read_imbalance(path + f'/results/{country}/time_dyn.txt')
 
@@ -81,6 +81,9 @@ def plot_load_imbalance(country, mode = 'std'):
     plt.ylabel('Load Imbalance')
     plt.title(f'Load Imbalance vs. Number of Workers - {country.capitalize()}')
     plt.legend()
+
+    # Customize ticks on x-axis
+    plt.xticks(num_workers_stat)
 
     # Create 'images' folder if it doesn't exist
     if not os.path.exists(path + '/images'):
@@ -120,7 +123,7 @@ def plot_speedup(country):
     plt.legend()
     
     # Customize ticks on x-axis
-    plt.xticks(stat_num_workers)
+    plt.xticks(stat_num_workers + [max_workers], labels=[str(worker) if worker != max_workers else f'{worker} (Hyperthreading)' for worker in stat_num_workers + [max_workers]])
     
     # Remove the grid
     plt.grid(False)
@@ -135,9 +138,9 @@ def plot_speedup(country):
     # Show the plot
     plt.show()
 
+
 path = os.getcwd()
 countries = ['italy', 'luxembourg', 'canada']
-
 for country in countries:
     plot_speedup(country)
     plot_load_imbalance(country)

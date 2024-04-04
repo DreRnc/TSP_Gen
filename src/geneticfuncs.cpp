@@ -39,7 +39,7 @@ void evaluate_population(vector<Individual>& population, const Matrix& distance_
     }
 }
 
-vector<Individual> select_parents(const vector<Individual>& population, int num_parents, mt19937& gen) {
+vector<Individual> select_parents(const vector<Individual>& population, const int num_parents, mt19937& gen) {
     vector<Individual> parents;
 
     double total_fitness = population_total_fitness(population);
@@ -93,7 +93,7 @@ pair<Individual, Individual> crossover(const Individual& parent1, const Individu
     return children;
 }
 
-Individual _cross(const Individual& parent1, const Individual& parent2, int cutpoint1, int cutpoint2, int size){
+Individual _cross(const Individual& parent1, const Individual& parent2, const int cutpoint1, const int cutpoint2, const int size){
     Individual child;
 
     for (int i = 0; i < size; ++i) {

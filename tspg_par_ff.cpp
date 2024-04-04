@@ -125,11 +125,13 @@ int main(int argc, char* argv[]) {
     poolEvolution<Individual, TSPGenEnv> pool(num_workers, population, selection, evolution, filter, termination, env);
 	pool.run_and_wait_end();
 
-    STOP(start, time);
+    STOP(start, total_time);
 
     ofstream outfile(file_path, ios::app);
 
-    outfile << "Time with " << num_workers << " workers: " << time << "\n" << endl;
+    outfile << "----- Recording run times -----" << endl;
+    outfile << "Number of workers: " << num_workers << endl;
+    outfile << "\nTotal time: " << total_time << '\n' << endl;
     
     cout << "Time statistics of the run have been written to file " << file_path << " successfully." << endl;
 

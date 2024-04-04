@@ -104,17 +104,20 @@ def plot_speedup(country):
     # Read total times for static and dynamic parallelism
     stat_num_workers, stat_total_times = read_times(path + f'/results/{country}/time_stat.txt')
     dyn_num_workers, dyn_total_times = read_times(path + f'/results/{country}/time_dyn.txt')
+    ff_num_workers, ff_total_times = read_times(path + f'/results/{country}/time_ff.txt')
 
     # Calculate speedup for static and dynamic parallelism
     stat_speedup = [sequential_time / time for time in stat_total_times]
     dyn_speedup = [sequential_time / time for time in dyn_total_times]
+    ff_speedup = [sequential_time / time for time in ff_total_times]
 
     # Plot speedup versus number of workers for static and dynamic parallelism
     plt.plot(stat_num_workers, stat_speedup, marker='o', label='Static Parallelism')
     plt.plot(dyn_num_workers, dyn_speedup, marker='s', label='Dynamic Parallelism')
+    plt.plot(ff_num_workers, ff_speedup, marker='s', label='FastFlow Parallelism')
     
     # Plot the diagonal
-    max_workers = max(max(stat_num_workers), max(dyn_num_workers))
+    max_workers = max(max(stat_num_workers), max(dyn_num_workers), max(ff_num_workers))
     plt.plot(range(max_workers + 1), range(max_workers + 1), linestyle='--', color='r', label='Ideal Speedup (x=y)')
     
     plt.xlabel('Number of Workers')

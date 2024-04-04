@@ -23,42 +23,11 @@ public:
         : route_length(route_length), distance_matrix(distance_matrix), population_size(population_size), num_generations(num_generations), num_parents(num_parents), timer(timer), num_workers(num_workers) {
     }
     
-    /*
-    void initialize() {
-        
-        thread tids[num_workers];
-
-        for(int i=0; i<num_workers; i++){
-            tids[i] = thread([&, i](){ 
-                
-                int chunk_size = population_size / num_workers;
-                // if I'm the last one, take what remains (chunk_size + population_size % num_workers)
-                int size = (i == (num_workers-1) ? (population_size - chunk_size*i) : (chunk_size));
-
-                vector<Individual> chunk_population;
-
-                chunk_population = initialize_population(size, route_length, gen);
-                evaluate_population(chunk_population, distance_matrix);
-
-                // Lock when pushing in the global vector of population
-                unique_lock chunk_lock(m);
-                population.insert(population.end(), chunk_population.begin(), chunk_population.end());
-            });
-        }
-        for(int i=0; i<num_workers; i++){
-            tids[i].join();
-        }
-
-        if(population.size() != population_size) cout<<"Error in initialization!"<<endl;
-    }
-    
-    */
     void initialize() {
         population = initialize_population(population_size, route_length, gen);
         evaluate_population(population, distance_matrix);
     }
     
-
     void evolve() {
         timer.start();
 
@@ -79,7 +48,7 @@ public:
 
         timer.recordOffspringParTime();
 
-        merge(population, offspring, gen);
+        merge(population, offspring);
         timer.recordMergeTime();
     }
 

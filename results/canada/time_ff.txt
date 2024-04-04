@@ -1,0 +1,30 @@
+----- Recording run times -----
+Number of workers: 2
+
+Total time: 202574296
+
+----- Recording run times -----
+Number of workers: 4
+
+Total time: 105234699
+
+----- Recording run times -----
+Number of workers: 8
+
+Total time: 55446820
+
+----- Recording run times -----
+Number of workers: 16
+
+Total time: 30501654
+
+----- Recording run times -----
+Number of workers: 32
+
+Total time: 18344429
+
+----- Recording run times -----
+Number of workers: 64
+
+Total time: 14960110
+

@@ -1,0 +1,38 @@
+# Common flags for both commands
+common_flags="-t -P 5000 -p 4096 -g 10"
+
+# Iterate over the values of $i for luxembourg
+mkdir results/luxembourg
+for ((i = 2; i <= 64; i *= 2)) 
+do 
+    # Concatenate common flags with the changing flags
+    flags="$common_flags -w $i -f "results/luxembourg/time_ff.txt" -d "data/luxembourg.tsp""
+    
+    # Execute the command with the concatenated flags
+    echo "Executing ./bin/tspg_par_ff $flags"
+    ./bin/tspg_par_ff $flags
+done
+
+# Iterate over the values of $i for canada
+mkdir results/canada
+for ((i = 2; i <= 64; i *= 2)) 
+do 
+    # Concatenate common flags with the changing flags
+    flags="$common_flags -w $i -f "results/canada/time_ff.txt" -d "data/canada.tsp""
+    
+    # Execute the command with the concatenated flags
+    echo "Executing ./bin/tspg_par_ff $flags"
+    ./bin/tspg_par_ff $flags
+done
+
+# Iterate over the values of $i for italy
+mkdir results/italy
+for ((i = 2; i <= 64; i *= 2)) 
+do 
+    # Concatenate common flags with the changing flags
+    flags="-t -P 2500 -p 2048 -g 10 -w $i -f "results/italy/time_ff.txt" -d "data/italy.tsp""
+    
+    # Execute the command with the concatenated flags
+    echo "Executing ./bin/tspg_par_ff $flags"
+    ./bin/tspg_par_ff $flags
+done

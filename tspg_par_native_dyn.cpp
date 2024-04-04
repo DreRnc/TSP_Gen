@@ -96,7 +96,7 @@ public:
 
         timer.recordOffspringParTime();
 
-        merge(population, offspring, gen);
+        merge(population, offspring);
         timer.recordMergeTime();
     }
 

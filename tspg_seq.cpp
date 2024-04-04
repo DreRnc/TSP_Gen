@@ -40,7 +40,7 @@ public:
         evaluate_population(offspring, distance_matrix);
         timer.recordEvaluationTime();
 
-        merge(population, offspring, gen);
+        merge(population, offspring);
         timer.recordMergeTime();
     }
 

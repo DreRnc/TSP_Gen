@@ -6,3 +6,4 @@ bin
 images
 .venv
 fastflow
+results**

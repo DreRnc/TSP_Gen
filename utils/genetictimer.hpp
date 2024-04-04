@@ -156,9 +156,9 @@ private:
     // doubles may not be able to represent them
     long calculateAverageTime(const std::vector<long>& time_vector) {
         if (time_vector.empty()) {
-            return 0.0;
+            return 0;
         }
-        return std::accumulate(time_vector.begin(), time_vector.end(), 0) / time_vector.size();
+        return std::accumulate(time_vector.begin(), time_vector.end(), 0L) / (long)time_vector.size();
     }
 
     void calculateAveragePhaseTimes() {

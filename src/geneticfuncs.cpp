@@ -49,7 +49,7 @@ vector<Individual> select_parents(const vector<Individual>& population, const in
         double random_fitness = dist(gen);
         double accumulated_fitness = 0.0;
         for (const Individual& individual : population) {
-            accumulated_fitness += 1.0 / individual.score;
+            accumulated_fitness += individual.fitness;
             if (accumulated_fitness >= random_fitness) {
                 parents.push_back(individual);
                 break;

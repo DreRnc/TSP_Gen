@@ -62,8 +62,6 @@ public:
     void evolve() {
         timer.start();
 
-        timer.recordSelectionTime();
-
         offspring.clear();
 
         thread tids[num_workers];

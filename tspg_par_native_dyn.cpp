@@ -22,23 +22,30 @@ class DynamicChunks {
 public:
     DynamicChunks() {}
 
-    void enqueue(vector<Individual> chunk) {
-        lock_guard<mutex> lock(queue_mutex);
-        tasks.push(chunk);
+    void generate_queue (int num_parents, int chunk_size) {
+        int num_chunks = num_parents / chunk_size;
+        for(int i = 0; i < num_chunks; i++){
+            if(i == num_chunks - 1) {
+                tickets.push(chunk_size + num_parents % chunk_size);
+            }
+            else {
+                tickets.push(chunk_size);
+            }
+        }
     }
 
-    vector<Individual> get_chunk() {
+    int get_ticket() {
         lock_guard<mutex> lock(queue_mutex);
-        if (tasks.empty()) {
-            return {};
+        if (tickets.empty()) {
+            return -1;
         }
-        vector<Individual> chunk = tasks.front();
-        tasks.pop();
+        int chunk = tickets.front();
+        tickets.pop();
         return chunk;
     }
 
 private:
-    queue<vector<Individual>> tasks;
+    queue<int> tickets;
     mutex queue_mutex;
 };
 
@@ -49,23 +56,6 @@ public:
         : route_length(route_length), distance_matrix(distance_matrix), population_size(population_size), num_generations(num_generations), num_parents(num_parents), 
         timer(timer), num_workers(num_workers), dyn_chunk_size(dyn_chunk_size){
     }
-    /*
-    void initialize() {
-        
-        thread tids[num_workers];
-
-        for(int i=0; i<num_workers; i++){
-            tids[i] = thread([&, i](){ initialize_chunk(i); });
-        }
-        for(int i=0; i<num_workers; i++){
-            tids[i].join();
-        }
-
-        population = mergeChunks(init_chunks);
-
-        if(population.size() != population_size) cout<<"Error in initialization!"<<endl;
-    }
-    */
 
     void initialize() {
         population = initialize_population(population_size, route_length, gen);
@@ -75,27 +65,21 @@ public:
     void evolve() {
         timer.start();
 
-        vector<Individual> parents = select_parents(population, num_parents, gen);
-        timer.recordSelectionTime();
-
-        offspring_chunks.clear();
+        offspring.clear();
 
         DynamicChunks task_pool;
-        thread tids[num_workers];
+        task_pool.generate_queue(num_parents, dyn_chunk_size);
 
-        for (size_t i = 0; i < parents.size(); i += dyn_chunk_size) {
-            vector<Individual>::iterator last = parents.begin() + min(i + dyn_chunk_size, parents.size());
-            vector<Individual> chunk(parents.begin() + i, last);
-            task_pool.enqueue(std::move(chunk));
-        }
+        thread tids[num_workers];
+        fill(time_loads.begin(), time_loads.end(), 0);
 
         for(int i=0; i<num_workers; i++){
             tids[i] = thread([&, i](){ 
                 START(start)
                 while (true) {
-                    vector<Individual> chunk = task_pool.get_chunk();
-                    if (chunk.empty()) break;
-                    evolve_chunk(chunk);
+                    int chunk_size = task_pool.get_ticket();
+                    if (chunk_size == -1) break;
+                    evolve_chunk(chunk_size);
                 }
                 STOP(start, worker_time);
                 unique_lock chunk_lock(m);
@@ -106,10 +90,10 @@ public:
         for(int i=0; i<num_workers; i++){
             tids[i].join();
         }
+        
         tuple<long, long, long, long> stats = vec_stats(time_loads);
         load_balancing_stats.push_back(stats);
 
-        vector<Individual> offspring = mergeChunks(offspring_chunks);
         timer.recordOffspringParTime();
 
         merge(population, offspring, gen);
@@ -143,8 +127,7 @@ private:
     int population_size;
     int num_generations;
     vector<Individual> population;
-    vector<vector<Individual>> offspring_chunks;
-    vector<vector<Individual>> init_chunks;
+    vector<Individual> offspring;
     GeneticTimer& timer;
     int num_workers;
     int dyn_chunk_size;
@@ -152,16 +135,18 @@ private:
     vector<long> time_loads;
     mutex m;
 
-    void evolve_chunk(vector<Individual>& parents_chunk){
+    void evolve_chunk(int size){
+        vector<Individual> chunk_parents = select_parents(population, size, gen);
 
-        vector<Individual> chunk_offspring = crossover_population(parents_chunk, gen);
+        vector<Individual> chunk_offspring = crossover_population(chunk_parents, gen);
+
         mutate(chunk_offspring, gen);
 
         evaluate_population(chunk_offspring, distance_matrix);
 
-        // Lock when pushing in the global vector of evolved chunks and timings
+        // Lock when pushing in the global vector of offsrping and timings
         unique_lock chunk_lock(m);
-        offspring_chunks.push_back(chunk_offspring);
+        offspring.insert(offspring.end(), chunk_offspring.begin(), chunk_offspring.end());
     }
 
     void initialize_chunk(int i){
@@ -169,34 +154,16 @@ private:
         // if I'm the last one, take what remains (chunk_size + population_size % num_workers)
         int size = (i == (num_workers-1) ? (population_size - chunk_size*i) : (chunk_size));
 
-        vector<Individual> population_chunk;
+        vector<Individual> chunk_population;
 
-        population_chunk = initialize_population(size, route_length, gen);
-        evaluate_population(population_chunk, distance_matrix);
+        chunk_population = initialize_population(size, route_length, gen);
+        evaluate_population(chunk_population, distance_matrix);
 
-        // Lock when pushing in the global vector of evolved chunks
+        // Lock when pushing in the global vector of population
         unique_lock chunk_lock(m);
-        init_chunks.push_back(population_chunk);
+        population.insert(population.end(), chunk_population.begin(), chunk_population.end());
     }
 
-    vector<Individual> mergeChunks(const vector<vector<Individual>>& chunks) {
-        vector<Individual> mergedChunks;
-        
-        // Reserve space for the merged vector to avoid frequent reallocations
-        size_t totalSize = 0;
-        for (const auto& vec : chunks) {
-            totalSize += vec.size();
-        }
-        mergedChunks.reserve(totalSize);
-        
-        // Iterate over each vector and append its elements to the merged vector
-        for (const auto& vec : chunks) {
-            mergedChunks.insert(mergedChunks.end(), vec.begin(), vec.end());
-        }
-        
-        return mergedChunks;
-    }
-    
 };
 
 int main(int argc, char* argv[]) {

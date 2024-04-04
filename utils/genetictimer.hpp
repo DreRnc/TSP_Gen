@@ -92,21 +92,21 @@ public:
         outfile << "----- Recording run times -----" << std::endl;
         outfile << "Number of workers: " << num_workers << std::endl;
         outfile << "Initialization time: " << initialization_time << std::endl;
-        outfile << "Selection average time: " << average_times[0] << std::endl;
         if(!parallel){
+            outfile << "Selection average time: " << average_times[0] << std::endl;
             outfile << "Crossover average time: " << average_times[1] << std::endl;
             outfile << "Mutation average time: " << average_times[2] << std::endl;
             outfile << "Evaluation average time: " << average_times[3] << std::endl;
             outfile << "Merge average time: " << average_times[4] << std::endl;
         }
         else{
-            outfile << "Offspring average time: " << average_times[1] << std::endl;
-            outfile << "Merge average time: " << average_times[2] << std::endl;
+            outfile << "Offspring average time: " << average_times[0] << std::endl;
+            outfile << "Merge average time: " << average_times[1] << std::endl;
             outfile << "Load balancing:" << std::endl;
-            outfile << "Min load time among workers (average across generations): " << average_times[3] << std::endl;
-            outfile << "Max load time among workers (average across generations): " << average_times[4] << std::endl;
-            outfile << "Mean of load times among workers (average across generations): " << average_times[5] << std::endl;
-            outfile << "Std of load times among workers (average across generations): " << average_times[6] << std::endl;
+            outfile << "Min load time among workers (average across generations): " << average_times[2] << std::endl;
+            outfile << "Max load time among workers (average across generations): " << average_times[3] << std::endl;
+            outfile << "Mean of load times among workers (average across generations): " << average_times[4] << std::endl;
+            outfile << "Std of load times among workers (average across generations): " << average_times[5] << std::endl;
 
         }
         outfile << "\nTotal time: " << total_time << '\n' << std::endl;
@@ -162,8 +162,8 @@ private:
     }
 
     void calculateAveragePhaseTimes() {
-        average_times.push_back(calculateAverageTime(selection_time));
         if (!parallel){
+            average_times.push_back(calculateAverageTime(selection_time));
             average_times.push_back(calculateAverageTime(crossover_time));
             average_times.push_back(calculateAverageTime(mutation_time));
             average_times.push_back(calculateAverageTime(evaluation_time));
@@ -191,7 +191,6 @@ private:
             }
             else {
                 merge_time[i] = merge_time[i] - offspringpar_time[i];
-                offspringpar_time[i] = offspringpar_time[i] - selection_time[i];
             }
         }
     }

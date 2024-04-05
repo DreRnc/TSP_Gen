@@ -79,8 +79,8 @@ public:
     }
 
     void writeTimesToFile(const std::string& filename, int num_workers) {
-        calculateAveragePhaseTimes();
         convertTimesTotalToPhase();
+        calculateAveragePhaseTimes();
 
         std::ofstream outfile(filename, std::ios::app);
 
@@ -180,7 +180,7 @@ private:
     }
 
     void convertTimesTotalToPhase(){
-        int num_generations = selection_time.size();
+        int num_generations = merge_time.size();
 
         for(int i = 0; i < num_generations; i++){
             if (!parallel){

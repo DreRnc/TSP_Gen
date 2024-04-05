@@ -1,0 +1,53 @@
+# Common flags for both sets of commands
+common_flags_1="-t -P 2048 -p 1024 -g 10 -d data/canada.tsp"
+common_flags_2="-t -P 8192 -p 4096 -g 10 -d data/canada.tsp"
+
+# Execute ./bin/tspg_seq
+flags_1="$common_flags_1 -f results/canada/time_seq_1024.txt"
+flags_2="$common_flags_2 -f results/canada/time_seq_4096.txt"
+echo "Executing ./bin/tspg_seq $flags_1"
+./bin/tspg_seq $flags_1
+echo "Executing ./bin/tspg_seq $flags_2"
+./bin/tspg_seq $flags_2
+
+# Iterate over the values of $i for ./bin/tspg_par_native
+for ((i = 2; i <= 64; i *= 2)) 
+do 
+    # Concatenate common flags with the changing flags
+    flags_1="$common_flags_1 -w $i -f results/canada/time_stat_1024.txt"
+    flags_2="$common_flags_2 -w $i -f results/canada/time_stat_4096.txt"
+    
+    # Execute the command with the concatenated flags
+    echo "Executing ./bin/tspg_par_native $flags_1"
+    ./bin/tspg_par_native $flags_1
+    echo "Executing ./bin/tspg_par_native $flags_2"
+    ./bin/tspg_par_native $flags_2
+done
+
+# Iterate over the values of $i for ./bin/tspg_par_native_dyn
+for ((i = 2; i <= 64; i *= 2)) 
+do 
+    # Concatenate common flags with the changing flags
+    flags_1="$common_flags_1 -w $i -ds 2 -f results/canada/time_dyn_1024.txt"
+    flags_2="$common_flags_2 -w $i -ds 2 -f results/canada/time_dyn_4096.txt"
+    
+    # Execute the command with the concatenated flags
+    echo "Executing ./bin/tspg_par_native_dyn $flags_1"
+    ./bin/tspg_par_native_dyn $flags_1
+    echo "Executing ./bin/tspg_par_native_dyn $flags_2"
+    ./bin/tspg_par_native_dyn $flags_2
+done
+
+# Iterate over the values of $i for ./bin/tspg_par_ff
+for ((i = 2; i <= 64; i *= 2)) 
+do 
+    # Concatenate common flags with the changing flags
+    flags_1="$common_flags_1 -w $i -f results/canada/time_ff_1024.txt"
+    flags_2="$common_flags_2 -w $i -f results/canada/time_ff_4096.txt"
+    
+    # Execute the command with the concatenated flags
+    echo "Executing ./bin/tspg_par_ff $flags_1"
+    ./bin/tspg_par_ff $flags_1
+    echo "Executing ./bin/tspg_par_ff $flags_2"
+    ./bin/tspg_par_ff $flags_2
+done

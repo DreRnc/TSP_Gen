@@ -1,0 +1,3 @@
+Executing ./bin/tspg_seq -t -P 2048 -p 1024 -g 10 -d data/canada.tsp -f results/canada/time_seq_1024.txt
+Executing ./bin/tspg_par_native_stat -t -P 2048 -p 1024 -g 10 -d data/canada.tsp -w 1 -f results/canada/time_stat_1024.txt
+Executing ./bin/tspg_par_native_dyn -t -P 2048 -p 1024 -g 10 -d data/canada.tsp -w 1 -ds 2 -f results/canada/time_dyn_1024.txt

@@ -51,7 +51,10 @@ public:
         STOP(start, merge_time)
         //timer.recordMergeTime();
         times.push_back(selection_time);
-        
+        times.push_back(crossover_time);
+        times.push_back(mutation_time);
+        times.push_back(evaluation_time);
+        times.push_back(merge_time);
     }
 
     void run() {
@@ -62,11 +65,12 @@ public:
 
         for (int i = 0; i < num_generations; i++) {
             evolve(times);
-            timer.recordSelectionTime(selection_time);
-            timer.recordCrossoverTime(crossover_time);
-            timer.recordMutationTime(mutation_time);
-            timer.recordEvaluationTime(evaluation_time);
-            timer.recordMergeTime(merge_time);
+            timer.recordSelectionTime(times[0]);
+            timer.recordCrossoverTime(times[1]);
+            timer.recordMutationTime(times[2]);
+            timer.recordEvaluationTime(times[3]);
+            timer.recordMergeTime(times[4]);
+            times.clear();
         }
         
         STOP(start_total, total_time)

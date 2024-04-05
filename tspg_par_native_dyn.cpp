@@ -74,19 +74,12 @@ public:
         thread tids[num_workers];
         fill(time_loads.begin(), time_loads.end(), 0);
 
-        for(int i=0; i<num_workers; i++){
-            tids[i] = thread([&, i](){ 
-                START(start)
-                while (true) {
-                    int chunk_size = task_pool.get_ticket();
-                    if (chunk_size == -1) break;
-                    evolve_chunk(chunk_size);
-                }
+        auto thread_body = [&](int i) {
+            worker_function(task_pool, time_loads[i]); 
+        };
 
-                STOP(start, worker_time);
-                unique_lock chunk_lock(m);
-                time_loads[i] = worker_time;
-            });
+        for(int i=0; i<num_workers; i++){
+            tids[i] = thread(thread_body, i);
         }
 
         for(int i=0; i<num_workers; i++){
@@ -96,10 +89,10 @@ public:
         tuple<long, long, long, long> stats = vec_stats(time_loads);
         load_balancing_stats.push_back(stats);
 
-        STOP(start, non_serial_time)
+        STOP(start, non_serial_time);
 
         merge(population, offspring);
-        STOP(start, serial_time)
+        STOP(start, serial_time);
 
         timer.recordNonSerialTime(non_serial_time);
         timer.recordSerialTime(serial_time);
@@ -109,7 +102,7 @@ public:
         load_balancing_stats.clear();
         time_loads.resize(num_workers);
         timer.reset();
-        START(start_total)
+        START(start_total);
 
         for (int i = 0; i < num_generations; i++) {
             evolve();
@@ -118,7 +111,6 @@ public:
         STOP(start_total, total_time);
         timer.recordTotalTime(total_time);
         timer.recordLoadBalanceStats(load_balancing_stats);
-        
     }
 
     Individual get_best() {
@@ -156,6 +148,17 @@ private:
         // Lock when pushing in the global vector of offsrping and timings
         unique_lock chunk_lock(m);
         offspring.insert(offspring.end(), chunk_offspring.begin(), chunk_offspring.end());
+    }
+
+    void worker_function(DynamicChunks& task_pool, long& worker_time) {
+        START(start);
+        while (true) {
+            int chunk_size = task_pool.get_ticket();
+            if (chunk_size == -1) break;
+            evolve_chunk(chunk_size);
+        }
+        STOP(start, elapsed);
+        worker_time = elapsed;
     }
 };
 

@@ -105,21 +105,6 @@ private:
         STOP(start, worker_time);
         time_loads[i] = worker_time;
     }
-
-    void initialize_chunk(int i){
-        int chunk_size = population_size / num_workers;
-        // if I'm the last one, take what remains (chunk_size + population_size % num_workers)
-        int size = (i == (num_workers-1) ? (population_size - chunk_size*i) : (chunk_size));
-
-        vector<Individual> chunk_population;
-
-        chunk_population = initialize_population(size, route_length, gen);
-        evaluate_population(chunk_population, distance_matrix);
-
-        // Lock when pushing in the global vector of population
-        unique_lock chunk_lock(m);
-        population.insert(population.end(), chunk_population.begin(), chunk_population.end());
-    }
 };
 
 int main(int argc, char* argv[]) {

@@ -21,15 +21,13 @@ unsigned int seed = 42;
 mt19937 gen(seed);
 
 struct TSPGenEnv {
-    TSPGenEnv(int route_length, int num_gen, int num_parents, const Matrix& distance_matrix, GeneticTimer& gentimer) : 
-            num_gen(num_gen), num_parents(num_parents), distance_matrix(distance_matrix), gentimer(gentimer) {}
+    TSPGenEnv(int route_length, int num_gen, int num_parents, const Matrix& distance_matrix) : 
+            num_gen(num_gen), num_parents(num_parents), distance_matrix(distance_matrix) {}
 
     int num_gen;
     int num_parents;
 
     const Matrix distance_matrix;
-
-    GeneticTimer& gentimer;
 
     vector<Individual> parents;
 
@@ -109,16 +107,15 @@ int main(int argc, char* argv[]) {
     vector<City> cities = generate_city_vector(data_path);
     int route_length = cities.size();
     const Matrix distance_matrix = generate_distance_matrix(cities);
-    
-    GeneticTimer gentimer(parallel);
-    TSPGenEnv env(route_length, num_gen, num_parents, distance_matrix, gentimer);
+
+    TSPGenEnv env(route_length, num_gen, num_parents, distance_matrix);
 
     START(start);
 
-    gentimer.start();
     vector<Individual> population = initialize_population(population_size, route_length, gen);
     evaluate_population(population, distance_matrix);
-    gentimer.recordInitializationTime();
+
+    STOP(start, initialization_time)
 
     if(verbose) cout << "Best random route: " << get_best(population).score << endl;
 
@@ -131,13 +128,12 @@ int main(int argc, char* argv[]) {
 
     outfile << "----- Recording run times -----" << endl;
     outfile << "Number of workers: " << num_workers << endl;
+    outfile << "Initialization time: " << initialization_time << endl;
     outfile << "\nTotal time: " << total_time << '\n' << endl;
     
     cout << "Time statistics of the run have been written to file " << file_path << " successfully." << endl;
 
     if(verbose) cout << "Best route after genetic alg: " << get_best(population).score << endl;
-
-    //if(track_time) gentimer.writeTimesToFile(file_path, num_workers);
 
     return 0;
 }

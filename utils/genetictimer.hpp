@@ -23,7 +23,7 @@ public:
     }
 
     void recordInitializationTime(long elapsed_time) {
-    initialization_time = elapsed_time;
+        initialization_time = elapsed_time;
     }
 
     void recordSelectionTime(long elapsed_time) {
@@ -55,7 +55,7 @@ public:
     }
 
     void recordTotalTime(long elapsed_time){
-        total_time = elapsed_time;
+        total_time = elapsed_time + initialization_time;
     }
 
     void writeTimesToFile(const string& filename, int num_workers) {

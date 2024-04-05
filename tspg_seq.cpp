@@ -14,6 +14,8 @@ using Matrix = vector<vector<double>>;
 unsigned int seed = 42;
 mt19937 gen(seed);
 
+long selection_time, crossover_time, mutation_time, evaluation_time, merge_time;
+
 class TSPGenSeq {
 public:
     TSPGenSeq(int route_length, const Matrix& distance_matrix, int population_size, int num_generations, int num_parents, GeneticTimer& timer)
@@ -26,22 +28,27 @@ public:
     }
 
     void evolve() {
-        timer.start();
+        START(start)
 
         vector<Individual> parents = select_parents(population, num_parents, gen);
-        timer.recordSelectionTime();
+        STOP(start, selection_time)
+        //timer.recordSelectionTime();
 
         vector<Individual> offspring = crossover_population(parents, gen);
-        timer.recordCrossoverTime();
+        STOP(start, crossover_time)
+        //timer.recordCrossoverTime();
 
         mutate(offspring, gen);
-        timer.recordMutationTime();
+        STOP(start, mutation_time)
+        //timer.recordMutationTime();
 
         evaluate_population(offspring, distance_matrix);
-        timer.recordEvaluationTime();
+        STOP(start, evaluation_time)
+        //timer.recordEvaluationTime();
 
         merge(population, offspring);
-        timer.recordMergeTime();
+        STOP(start, merge_time)
+        //timer.recordMergeTime();
     }
 
     void run() {
@@ -50,6 +57,7 @@ public:
         for (int i = 0; i < num_generations; i++) {
             evolve();
         }
+        
         timer.recordTotalTime();
     }
 

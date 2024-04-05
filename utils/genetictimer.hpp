@@ -86,8 +86,6 @@ public:
 
         ofstream outfile(filename, ios::app);
 
-        ofstream outfile(filename, ios::app);
-
         if (!outfile.is_open()) {
             cerr << "Error: Unable to open file " << filename << " for writing." << endl;
             return;
@@ -103,7 +101,7 @@ public:
             outfile << "Evaluation average time: " << phase_stats[3].first << "+- " << phase_stats[3].second << endl;
             outfile << "Merge average time: " << phase_stats[4].first << "+- " << phase_stats[4].second << endl;
         } else {
-            outfile << "Offspring average time: " << phase_stats[0].first << endl;
+            outfile << "Worker average time: " << phase_stats[0].first << endl;
             outfile << "Merge average time: " << phase_stats[1].first << endl;
             outfile << "Load balancing:" << endl;
             outfile << "Min load time among workers (average across generations): " << phase_stats[2].first << "+- " << phase_stats[2].second << endl;

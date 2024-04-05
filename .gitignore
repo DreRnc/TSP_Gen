@@ -6,5 +6,5 @@ bin
 images
 .venv
 fastflow
-results**
+results/old
 sh/old

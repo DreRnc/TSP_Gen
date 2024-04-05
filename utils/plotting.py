@@ -64,22 +64,22 @@ def read_imbalance_std(filename):
                 load_imbalances.append(float(line.split()[-1]))
     return num_workers, load_imbalances
 
-def plot_load_imbalance(country, mode = 'std'):
+def plot_load_imbalance(country, size, mode = 'std'):
     # Read load imbalance data for different number of workers
     if mode == 'std':
         read_imbalance = read_imbalance_std
     elif mode == 'maxmin':
         read_imbalance = read_imbalance_maxmin
 
-    num_workers_stat, load_imbalances_stat = read_imbalance(path + f'/results/{country}/time_stat.txt')
-    num_workers_dyn, load_imbalances_dyn = read_imbalance(path + f'/results/{country}/time_dyn.txt')
+    num_workers_stat, load_imbalances_stat = read_imbalance(path + f'/results/{country}/time_stat{size}.txt')
+    num_workers_dyn, load_imbalances_dyn = read_imbalance(path + f'/results/{country}/time_dyn{size}.txt')
 
     # Plot load imbalance versus number of workers for static and dynamic parallelism
     plt.plot(num_workers_stat, load_imbalances_stat, marker='o', label='Static Parallelism')
     plt.plot(num_workers_dyn, load_imbalances_dyn, marker='s', label='Dynamic Parallelism')
     plt.xlabel('Number of Workers')
     plt.ylabel('Load Imbalance')
-    plt.title(f'Load Imbalance vs. Number of Workers - {country.capitalize()}')
+    plt.title(f'Load Imbalance vs. Number of Workers - {country.capitalize()} ({size})')
     plt.legend()
 
     # Customize ticks on x-axis

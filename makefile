@@ -3,7 +3,7 @@ CXX = g++
 # Compiler flags
 CXXFLAGS = -std=c++20 -O3
 
-all: bin/tspg_seq bin/tspg_par_native bin/tspg_par_native_dyn bin/tspg_par_ff
+all: bin/tspg_seq bin/tspg_par_native_stat bin/tspg_par_native_dyn bin/tspg_par_ff
 
 # Compiling source files
 obj/distancefuncs.o: src/distancefuncs.cpp src/distancefuncs.hpp
@@ -22,7 +22,7 @@ obj/tspg_seq.o: tspg_seq.cpp src/distancefuncs.hpp src/geneticfuncs.hpp src/util
 	mkdir -p obj
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-obj/tspg_par_native.o: tspg_par_native.cpp src/distancefuncs.hpp src/geneticfuncs.hpp src/utilfuncs.hpp utils/argumentparser.hpp utils/genetictimer.hpp utils/utimer.hpp src/utilfuncs.hpp
+obj/tspg_par_native_stat.o: tspg_par_native_stat.cpp src/distancefuncs.hpp src/geneticfuncs.hpp src/utilfuncs.hpp utils/argumentparser.hpp utils/genetictimer.hpp utils/utimer.hpp src/utilfuncs.hpp
 	mkdir -p obj
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
@@ -39,7 +39,7 @@ bin/tspg_seq: obj/tspg_seq.o obj/distancefuncs.o obj/geneticfuncs.o obj/utilfunc
 	mkdir -p bin
 	$(CXX) $(CXXFLAGS) $^ -o $@ -pthread
 
-bin/tspg_par_native: obj/tspg_par_native.o obj/distancefuncs.o obj/geneticfuncs.o obj/utilfuncs.o
+bin/tspg_par_native_stat: obj/tspg_par_native_stat.o obj/distancefuncs.o obj/geneticfuncs.o obj/utilfuncs.o
 	mkdir -p bin
 	$(CXX) $(CXXFLAGS) $^ -o $@ -pthread
 

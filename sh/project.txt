@@ -13,7 +13,7 @@ echo "Executing ./bin/tspg_seq $flags_1"
 echo "Executing ./bin/tspg_seq $flags_2"
 ./bin/tspg_seq $flags_2
 
-# Iterate over the values of $i for ./bin/tspg_par_native
+# Iterate over the values of $i for ./bin/tspg_par_native_stat
 for ((i = 2; i <= 64; i *= 2)) 
 do 
     # Concatenate common flags with the changing flags
@@ -21,10 +21,10 @@ do
     flags_2="$common_flags_2 -w $i -f results/canada/time_stat_4096.txt"
     
     # Execute the command with the concatenated flags
-    echo "Executing ./bin/tspg_par_native $flags_1"
-    ./bin/tspg_par_native $flags_1
-    echo "Executing ./bin/tspg_par_native $flags_2"
-    ./bin/tspg_par_native $flags_2
+    echo "Executing ./bin/tspg_par_native_stat $flags_1"
+    ./bin/tspg_par_native_stat $flags_1
+    echo "Executing ./bin/tspg_par_native_stat $flags_2"
+    ./bin/tspg_par_native_stat $flags_2
 done
 
 # Iterate over the values of $i for ./bin/tspg_par_native_dyn

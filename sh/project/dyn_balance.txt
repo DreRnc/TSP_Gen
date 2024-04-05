@@ -1,5 +1,5 @@
 # Common flags for both sets of commands
-common_flags="-t -P 8192 -p 4096 -g 10 -d data/qatar.tsp -f results/qatar/time_dyn_4096.txt"
+common_flags="-t -P 16384 -p 8192 -g 10 -d data/qatar.tsp -f results/qatar/time_dyn_4096.txt"
 
 mkdir results
 mkdir results/qatar
@@ -10,7 +10,7 @@ do
     for ((i = 2; i <= 64; i *= 2)) 
     do 
         # Concatenate common flags with the changing flags
-        flags="$common_flags -w $i -ds $j
+        flags="$common_flags -w $i -ds $j"
         
         # Execute the command with the concatenated flags
         echo "Executing ./bin/tspg_par_native_dyn $flags"

@@ -8,8 +8,8 @@ mkdir results/canada
 for ((i = 0; i < 10; i++)) 
 do
     # Execute ./bin/tspg_seq
-    flags_1="$common_flags_1 -f results/canada/time_seq_1024.txt"
-    flags_2="$common_flags_2 -f results/canada/time_seq_4096.txt"
+    flags_1="$common_flags_1 -f results/canada/time_seq_1024_stats.txt"
+    flags_2="$common_flags_2 -f results/canada/time_seq_4096_stats.txt"
     echo "Executing ./bin/tspg_seq $flags_1"
     ./bin/tspg_seq $flags_1
     echo "Executing ./bin/tspg_seq $flags_2"

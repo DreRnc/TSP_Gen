@@ -32,7 +32,7 @@ tuple<long, long, long, long> vec_stats(const vector<long>& v) {
     for (const long& d : v) {
         accum += (d - mean) * (d - mean);
     }
-    long double stdev = sqrt(accum / (v.size() - 1));
+    long double stdev = sqrt(accum / (v.size()));
 
     return make_tuple(minimum, maximum, mean, static_cast<long>(stdev));
 }

@@ -1,0 +1,84 @@
+----- Recording run times -----
+Number of workers: 2
+Initialization time: 85870
+Offspring average time: 205717
+Merge average time: 14930
+Load balancing:
+Min load time among workers (average across generations): 203491
+Max load time among workers (average across generations): 203563
+Mean of load times among workers (average across generations): 203526
+Std of load times among workers (average across generations): 50
+
+Total time: 2206499
+
+Dynamic chunk size: 4
+----- Recording run times -----
+Number of workers: 4
+Initialization time: 83469
+Offspring average time: 103603
+Merge average time: 13427
+Load balancing:
+Min load time among workers (average across generations): 101744
+Max load time among workers (average across generations): 101971
+Mean of load times among workers (average across generations): 101857
+Std of load times among workers (average across generations): 100
+
+Total time: 1170336
+
+Dynamic chunk size: 4
+----- Recording run times -----
+Number of workers: 8
+Initialization time: 84393
+Offspring average time: 52965
+Merge average time: 13335
+Load balancing:
+Min load time among workers (average across generations): 51008
+Max load time among workers (average across generations): 51465
+Mean of load times among workers (average across generations): 51223
+Std of load times among workers (average across generations): 160
+
+Total time: 663034
+
+Dynamic chunk size: 4
+----- Recording run times -----
+Number of workers: 16
+Initialization time: 85703
+Offspring average time: 29617
+Merge average time: 18729
+Load balancing:
+Min load time among workers (average across generations): 26148
+Max load time among workers (average across generations): 27170
+Mean of load times among workers (average across generations): 26689
+Std of load times among workers (average across generations): 327
+
+Total time: 483492
+
+Dynamic chunk size: 4
+----- Recording run times -----
+Number of workers: 32
+Initialization time: 83315
+Offspring average time: 18212
+Merge average time: 15735
+Load balancing:
+Min load time among workers (average across generations): 13246
+Max load time among workers (average across generations): 15460
+Mean of load times among workers (average across generations): 14350
+Std of load times among workers (average across generations): 657
+
+Total time: 339498
+
+Dynamic chunk size: 4
+----- Recording run times -----
+Number of workers: 64
+Initialization time: 86125
+Offspring average time: 16551
+Merge average time: 18416
+Load balancing:
+Min load time among workers (average across generations): 7717
+Max load time among workers (average across generations): 13445
+Mean of load times among workers (average across generations): 10740
+Std of load times among workers (average across generations): 1555
+
+Total time: 349706
+
+Dynamic chunk size: 4

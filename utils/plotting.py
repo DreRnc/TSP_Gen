@@ -64,15 +64,15 @@ def read_imbalance_std(filename):
                 load_imbalances.append(float(line.split()[-1]))
     return num_workers, load_imbalances
 
-def plot_load_imbalance(country, size, mode = 'std'):
+def plot_load_imbalance(country, size, mode = 'maxmin'):
     # Read load imbalance data for different number of workers
     if mode == 'std':
         read_imbalance = read_imbalance_std
     elif mode == 'maxmin':
         read_imbalance = read_imbalance_maxmin
 
-    num_workers_stat, load_imbalances_stat = read_imbalance(path + f'/results/{country}/time_stat{size}.txt')
-    num_workers_dyn, load_imbalances_dyn = read_imbalance(path + f'/results/{country}/time_dyn{size}.txt')
+    num_workers_stat, load_imbalances_stat = read_imbalance(path + f'/results/{country}/time_stat_{size}.txt')
+    num_workers_dyn, load_imbalances_dyn = read_imbalance(path + f'/results/{country}/time_dyn_{size}.txt')
 
     # Plot load imbalance versus number of workers for static and dynamic parallelism
     plt.plot(num_workers_stat, load_imbalances_stat, marker='o', label='Static Parallelism')
@@ -90,21 +90,21 @@ def plot_load_imbalance(country, size, mode = 'std'):
         os.makedirs(path + '/images')
 
     # Save the plot as an image
-    plt.savefig(path + f'/images/load_imbalance_plot_{country}.png')
+    plt.savefig(path + f'/images/load_imbalance_plot_{country}_{size}.png')
 
     # Show the plot
     plt.show()
 
 
-def plot_speedup(country):
+def plot_speedup(country, size):
     # Read sequential total time from the sequential time file
-    seq_num_workers, seq_total_times = read_times(path + f'/results/{country}/time_seq.txt')
+    seq_num_workers, seq_total_times = read_times(path + f'/results/{country}/time_seq_{size}.txt')
     sequential_time = seq_total_times[0]  # Sequential time is the first entry
 
     # Read total times for static and dynamic parallelism
-    stat_num_workers, stat_total_times = read_times(path + f'/results/{country}/time_stat.txt')
-    dyn_num_workers, dyn_total_times = read_times(path + f'/results/{country}/time_dyn.txt')
-    ff_num_workers, ff_total_times = read_times(path + f'/results/{country}/time_ff.txt')
+    stat_num_workers, stat_total_times = read_times(path + f'/results/{country}/time_stat_{size}.txt')
+    dyn_num_workers, dyn_total_times = read_times(path + f'/results/{country}/time_dyn_{size}.txt')
+    ff_num_workers, ff_total_times = read_times(path + f'/results/{country}/time_ff_{size}.txt')
 
     # Calculate speedup for static and dynamic parallelism
     stat_speedup = [sequential_time / time for time in stat_total_times]
@@ -122,7 +122,7 @@ def plot_speedup(country):
     
     plt.xlabel('Number of Workers')
     plt.ylabel('Speedup')
-    plt.title(f'Speedup vs. Number of Workers - {country.capitalize()}')
+    plt.title(f'Speedup vs. Number of Workers - {country.capitalize()} ({size})')
     plt.legend()
     
     # Customize ticks on x-axis
@@ -136,14 +136,17 @@ def plot_speedup(country):
         os.makedirs(path + '/images')
 
     # Save the plot as an image
-    plt.savefig(path + f'/images/speedup_plot_{country}.png')
+    plt.savefig(path + f'/images/speedup_plot_{country}_{size}.png')
 
     # Show the plot
     plt.show()
 
 
 path = os.getcwd()
-countries = ['italy', 'luxembourg', 'canada']
+countries = ['canada']
+sizes = ['1024', '4096']
+
 for country in countries:
-    plot_speedup(country)
-    plot_load_imbalance(country)
+    for size in sizes:
+        plot_speedup(country, size)
+        plot_load_imbalance(country, size, mode='maxmin')

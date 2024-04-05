@@ -207,7 +207,12 @@ int main(int argc, char* argv[]) {
 
     if(verbose) cout << "Best route after genetic alg: " << ga.get_best().score << endl;
 
-    if(track_time) gentimer.writeTimesToFile(file_path, num_workers);
 
+    if(track_time){
+        gentimer.writeTimesToFile(file_path, num_workers);
+        ofstream outfile(file_path, ios::app);
+        outfile << "Dynamic chunk size: " << dyn_chunk_size << endl;
+    }
+    
     return 0;
 }

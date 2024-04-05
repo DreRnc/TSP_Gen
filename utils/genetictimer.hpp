@@ -96,18 +96,18 @@ public:
         outfile << "Initialization time: " << initialization_time << endl;
         if (!parallel) {
             outfile << "Selection average time: " << phase_stats[0].first << " +- " << phase_stats[0].second << endl;
-            outfile << "Crossover average time: " << phase_stats[1].first << "+- " << phase_stats[1].second << endl;
-            outfile << "Mutation average time: " << phase_stats[2].first << "+- " << phase_stats[2].second << endl;
-            outfile << "Evaluation average time: " << phase_stats[3].first << "+- " << phase_stats[3].second << endl;
-            outfile << "Merge average time: " << phase_stats[4].first << "+- " << phase_stats[4].second << endl;
+            outfile << "Crossover average time: " << phase_stats[1].first << " +- " << phase_stats[1].second << endl;
+            outfile << "Mutation average time: " << phase_stats[2].first << " +- " << phase_stats[2].second << endl;
+            outfile << "Evaluation average time: " << phase_stats[3].first << " +- " << phase_stats[3].second << endl;
+            outfile << "Merge average time: " << phase_stats[4].first << " +- " << phase_stats[4].second << endl;
         } else {
             outfile << "Worker average time: " << phase_stats[0].first << endl;
             outfile << "Merge average time: " << phase_stats[1].first << endl;
             outfile << "Load balancing:" << endl;
-            outfile << "Min load time among workers (average across generations): " << phase_stats[2].first << "+- " << phase_stats[2].second << endl;
-            outfile << "Max load time among workers (average across generations): " << phase_stats[3].first << "+- " << phase_stats[3].second << endl;
-            outfile << "Mean of load times among workers (average across generations): " << phase_stats[4].first << "+- " << phase_stats[4].second << endl;
-            outfile << "Std of load times among workers (average across generations): " << phase_stats[5].first << "+- " << phase_stats[5].second << endl;
+            outfile << "Min load time among workers (average across generations): " << phase_stats[2].first << " +- " << phase_stats[2].second << endl;
+            outfile << "Max load time among workers (average across generations): " << phase_stats[3].first << " +- " << phase_stats[3].second << endl;
+            outfile << "Mean of load times among workers (average across generations): " << phase_stats[4].first << " +- " << phase_stats[4].second << endl;
+            outfile << "Std of load times among workers (average across generations): " << phase_stats[5].first << " +- " << phase_stats[5].second << endl;
         }       
 
         outfile << "\nTotal time: " << total_time << '\n' << endl;

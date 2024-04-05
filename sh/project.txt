@@ -2,6 +2,9 @@
 common_flags_1="-t -P 2048 -p 1024 -g 10 -d data/canada.tsp"
 common_flags_2="-t -P 8192 -p 4096 -g 10 -d data/canada.tsp"
 
+mkdir results
+mkdir results/canada
+
 # Execute ./bin/tspg_seq
 flags_1="$common_flags_1 -f results/canada/time_seq_1024.txt"
 flags_2="$common_flags_2 -f results/canada/time_seq_4096.txt"

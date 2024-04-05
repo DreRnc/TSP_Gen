@@ -52,6 +52,8 @@ public:
 
         merge(population, offspring);
         STOP(start, serial_time)
+        timer.recordNonSerialTime(non_serial_time);
+        timer.recordSerialTime(serial_time);
     }
 
     void run() {
@@ -62,8 +64,6 @@ public:
 
         for (int i = 0; i < num_generations; i++) {
             evolve();
-            timer.recordNonSerialTime(non_serial_time);
-            timer.recordSerialTime(serial_time);
         }
 
         STOP(start_total, total_time);

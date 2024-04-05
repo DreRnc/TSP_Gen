@@ -1,6 +1,6 @@
 # Common flags for both sets of commands
 common_flags_1="-t -P 2048 -p 1024 -g 10 -d data/canada.tsp"
-common_flags_2="-t -P 8192 -p 4096 -g 10 -d data/canada.tsp"
+# common_flags_2="-t -P 8192 -p 4096 -g 10 -d data/canada.tsp"
 
 rm -r results
 mkdir results

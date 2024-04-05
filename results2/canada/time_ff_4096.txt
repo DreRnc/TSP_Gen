@@ -1,0 +1,6 @@
+----- Recording run times -----
+Number of workers: 1
+Initialization time: 1316658
+
+Total time: 340829451
+

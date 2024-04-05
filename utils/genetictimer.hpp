@@ -95,7 +95,7 @@ public:
         outfile << "Number of workers: " << num_workers << endl;
         outfile << "Initialization time: " << initialization_time << endl;
         if (!parallel) {
-            outfile << "Selection average time: " << phase_stats[0].first << "+- " << phase_stats[0].second << endl;
+            outfile << "Selection average time: " << phase_stats[0].first << " +- " << phase_stats[0].second << endl;
             outfile << "Crossover average time: " << phase_stats[1].first << "+- " << phase_stats[1].second << endl;
             outfile << "Mutation average time: " << phase_stats[2].first << "+- " << phase_stats[2].second << endl;
             outfile << "Evaluation average time: " << phase_stats[3].first << "+- " << phase_stats[3].second << endl;

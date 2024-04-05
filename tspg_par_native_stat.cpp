@@ -17,6 +17,8 @@ using Matrix = vector<vector<double>>;
 unsigned int seed = 42;
 mt19937 gen(seed);
 
+long non_serial_time, serial_time;
+
 class TSPGenParNative {
 public:
     TSPGenParNative(int route_length, const Matrix& distance_matrix, int population_size, int num_generations, int num_parents, GeneticTimer& timer, int num_workers)
@@ -29,7 +31,7 @@ public:
     }
     
     void evolve() {
-        timer.start();
+        START(start)
 
         offspring.clear();
 
@@ -46,20 +48,26 @@ public:
         tuple<long, long, long, long> stats = vec_stats(time_loads);
         load_balancing_stats.push_back(stats);
 
-        timer.recordOffspringParTime();
+        STOP(start, non_serial_time)
 
         merge(population, offspring);
-        timer.recordMergeTime();
+        STOP(start, serial_time)
     }
 
     void run() {
+        load_balancing_stats.clear();
         time_loads.resize(num_workers);
         timer.reset();
-        timer.start_total();
+        START(start_total)
+
         for (int i = 0; i < num_generations; i++) {
             evolve();
+            timer.recordNonSerialTime(non_serial_time);
+            timer.recordSerialTime(serial_time);
         }
-        timer.recordTotalTime();
+
+        STOP(start_total, total_time);
+        timer.recordTotalTime(total_time);
         timer.recordLoadBalanceStats(load_balancing_stats);
     }
 
@@ -127,12 +135,13 @@ int main(int argc, char* argv[]) {
     int route_length = cities.size();
     const Matrix distance_matrix = generate_distance_matrix(cities);
     
-    GeneticTimer gentimer(parallel);
+    GeneticTimer gentimer(parallel, num_generations);
     TSPGenParNative ga(route_length, distance_matrix, population_size, num_generations, num_parents, gentimer, num_workers);
 
-    gentimer.start();
+    START(start_init)
     ga.initialize();
-    gentimer.recordInitializationTime();
+    STOP(start_init, initialization_time)
+    gentimer.recordInitializationTime(initialization_time);
 
     if(verbose) cout << "Best random route: " << ga.get_best().score << endl;
 

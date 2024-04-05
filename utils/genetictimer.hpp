@@ -12,19 +12,7 @@ using namespace std;
 class GeneticTimer {
 public:
     
-    GeneticTimer(bool parallel) : parallel(parallel) {}
-
-    void start_total() {
-        start_total_time = chrono::steady_clock::now();
-    }
-
-    void start() {
-        start_time = chrono::steady_clock::now();
-    }
-
-    void stop() {
-        end_time = chrono::steady_clock::now();
-    }
+    GeneticTimer(bool parallel, int num_generations) : parallel(parallel), num_generations(num_generations) {}
 
     void reset() {
         selection_time.clear();
@@ -34,50 +22,40 @@ public:
         merge_time.clear();
     }
 
-    void recordInitializationTime() {
-        stop();
-        auto elapsed_time = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
-        initialization_time = elapsed_time;
+    void recordInitializationTime(long elapsed_time) {
+    initialization_time = elapsed_time;
     }
-    void recordSelectionTime() {
-        stop();
-        auto elapsed_time = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+
+    void recordSelectionTime(long elapsed_time) {
         selection_time.push_back(elapsed_time);
     }
 
-    void recordCrossoverTime() {
-        stop();
-        auto elapsed_time = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+    void recordCrossoverTime(long elapsed_time) {
         crossover_time.push_back(elapsed_time);
     }
 
-    void recordMutationTime() {
-        stop();
-        auto elapsed_time = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+    void recordMutationTime(long elapsed_time) {
         mutation_time.push_back(elapsed_time);
     }
 
-    void recordEvaluationTime() {
-        stop();
-        auto elapsed_time = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+    void recordEvaluationTime(long elapsed_time) {
         evaluation_time.push_back(elapsed_time);
     }
 
-    void recordMergeTime() {
-        stop();
-        auto elapsed_time = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+    void recordMergeTime(long elapsed_time) {
         merge_time.push_back(elapsed_time);
     }
 
-    void recordOffspringParTime() {
-        stop();
-        auto elapsed_time = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
-        offspringpar_time.push_back(elapsed_time);
+    void recordNonSerialTime(long elapsed_time) {
+        non_serial_time.push_back(elapsed_time);
+    }
+        
+    void recordSerialTime(long elapsed_time) {
+        serial_time.push_back(elapsed_time);
     }
 
-    void recordTotalTime(){
-        stop();
-        total_time = chrono::duration_cast<chrono::microseconds>(end_time - start_total_time).count();
+    void recordTotalTime(long elapsed_time){
+        total_time = elapsed_time;
     }
 
     void writeTimesToFile(const string& filename, int num_workers) {
@@ -101,13 +79,20 @@ public:
             outfile << "Evaluation average time: " << phase_stats[3].first << " +- " << phase_stats[3].second << endl;
             outfile << "Merge average time: " << phase_stats[4].first << " +- " << phase_stats[4].second << endl;
         } else {
-            outfile << "Worker average time: " << phase_stats[0].first << endl;
-            outfile << "Merge average time: " << phase_stats[1].first << endl;
-            outfile << "Load balancing:" << endl;
-            outfile << "Min load time among workers (average across generations): " << phase_stats[2].first << " +- " << phase_stats[2].second << endl;
-            outfile << "Max load time among workers (average across generations): " << phase_stats[3].first << " +- " << phase_stats[3].second << endl;
-            outfile << "Mean of load times among workers (average across generations): " << phase_stats[4].first << " +- " << phase_stats[4].second << endl;
-            outfile << "Std of load times among workers (average across generations): " << phase_stats[5].first << " +- " << phase_stats[5].second << endl;
+            outfile << "Serial average time: " << phase_stats[0].first << " +- " << phase_stats[0].second << endl;
+            outfile << "Non-serial average time: " << phase_stats[1].first << " +- " << phase_stats[1].second << endl;
+
+            outfile << "Load balancing statistics: " << endl;
+            outfile << "Min load (averaged over generations): " << phase_stats[2].first << " +- " << phase_stats[2].second << endl;
+            outfile << "Max load (averaged over generations): " << phase_stats[3].first << " +- " << phase_stats[3].second << endl;
+            outfile << "Mean load (averaged over generations): " << phase_stats[4].first << " +- " << phase_stats[4].second << endl;
+            outfile << "Standard deviation of load (averaged over generations): " << phase_stats[5].first << " +- " << phase_stats[5].second << endl;
+
+            outfile << "Parallelization statistics: " << endl;
+            outfile << "Average load imbalance (max - mean): " << phase_stats[3].first - phase_stats[4].first << endl;
+            outfile << "Total load imbalance (max - mean): " << accumulate(max_loads.begin(), max_loads.end(), 0L) - accumulate(mean_loads.begin(), mean_loads.end(), 0L) << endl;
+            outfile << "Total serial time (including initialization): " << accumulate(serial_time.begin(), serial_time.end(), 0L) + initialization_time << endl;
+            outfile << "Total non-serial time: " << accumulate(non_serial_time.begin(), non_serial_time.end(), 0L) << endl;
         }       
 
         outfile << "\nTotal time: " << total_time << '\n' << endl;
@@ -132,16 +117,21 @@ public:
 private:    
 
     bool parallel;
+    int num_generations;
 
     long initialization_time;
     long total_time;
 
+    // Sequential timings
     vector<long> selection_time;
     vector<long> crossover_time;
     vector<long> mutation_time;
     vector<long> evaluation_time;
     vector<long> merge_time;
-    vector<long> offspringpar_time;
+
+    // Parallel timings
+    vector<long> serial_time;
+    vector<long> non_serial_time;
 
     vector<pair<double, double>> phase_stats;
 
@@ -150,9 +140,6 @@ private:
     vector<long> mean_loads;
     vector<long> std_loads;
 
-    chrono::steady_clock::time_point start_total_time;
-    chrono::steady_clock::time_point start_time;
-    chrono::steady_clock::time_point end_time;
 
     pair<double, double> calculatePhaseStats(const vector<long>& time_vector) {
         
@@ -179,8 +166,8 @@ private:
             phase_stats.push_back(calculatePhaseStats(merge_time));
         }
         else {
-            phase_stats.push_back(calculatePhaseStats(offspringpar_time));
-            phase_stats.push_back(calculatePhaseStats(merge_time));
+            phase_stats.push_back(calculatePhaseStats(serial_time));
+            phase_stats.push_back(calculatePhaseStats(non_serial_time));
             phase_stats.push_back(calculatePhaseStats(min_loads));
             phase_stats.push_back(calculatePhaseStats(max_loads));
             phase_stats.push_back(calculatePhaseStats(mean_loads));
@@ -189,7 +176,6 @@ private:
     }
 
     void convertTimesTotalToPhase(){
-        int num_generations = merge_time.size();
 
         for(int i = 0; i < num_generations; i++){
             if (!parallel){
@@ -199,7 +185,7 @@ private:
                 crossover_time[i] = crossover_time[i] - selection_time[i];
             }
             else {
-                merge_time[i] = merge_time[i] - offspringpar_time[i];
+                serial_time[i] = serial_time[i] - non_serial_time[i];
             }
         }
     }

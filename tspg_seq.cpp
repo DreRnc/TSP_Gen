@@ -14,7 +14,8 @@ using Matrix = vector<vector<double>>;
 unsigned int seed = 42;
 mt19937 gen(seed);
 
-long selection_time, crossover_time, mutation_time, evaluation_time, merge_time;
+// If this slowes down, put it in the class and push into vector such as in dyn version
+long selection_time, crossover_time, mutation_time, evaluation_time, merge_time, non_serial_time;
 
 class TSPGenSeq {
 public:
@@ -52,13 +53,20 @@ public:
     }
 
     void run() {
+        START(start_total)
         timer.reset();
-        timer.start_total();
+
         for (int i = 0; i < num_generations; i++) {
             evolve();
+            timer.recordSelectionTime(selection_time);
+            timer.recordCrossoverTime(crossover_time);
+            timer.recordMutationTime(mutation_time);
+            timer.recordEvaluationTime(evaluation_time);
+            timer.recordMergeTime(merge_time);
         }
         
-        timer.recordTotalTime();
+        STOP(start_total, total_time)
+        timer.recordTotalTime(total_time);
     }
 
     Individual get_best() {
@@ -101,12 +109,13 @@ int main(int argc, char* argv[]) {
     int route_length = cities.size();
     const Matrix distance_matrix = generate_distance_matrix(cities);
     
-    GeneticTimer gentimer(parallel);
+    GeneticTimer gentimer(parallel, num_generations);
     TSPGenSeq ga(route_length, distance_matrix, population_size, num_generations, num_parents, gentimer);
 
-    gentimer.start();
+    START(start_init)
     ga.initialize();
-    gentimer.recordInitializationTime();
+    STOP(start_init, initialization_time)
+    gentimer.recordInitializationTime(initialization_time);
 
     if(verbose) cout << "Best random route: " << ga.get_best().score << endl;
 

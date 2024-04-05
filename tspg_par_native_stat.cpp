@@ -57,7 +57,6 @@ public:
         timer.reset();
         timer.start_total();
         for (int i = 0; i < num_generations; i++) {
-            cout << "Starting evolution: " << i << endl;
             evolve();
         }
         timer.recordTotalTime();

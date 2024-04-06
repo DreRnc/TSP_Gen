@@ -1,13 +1,13 @@
 # Common flags for both sets of commands
-common_flags="-t -P 16384 -p 8192 -g 10 -d data/qatar.tsp"
+common_flags="-t -P 16384 -p 8192 -g 10 -d data/djibouti.tsp"
 
-rm -r results/qatar
-mkdir -p results/qatar
+rm -r results/djibouti
+mkdir -p results/djibouti
 
 for ((j = 2; j <= 64; j *= 2)) 
 do  
     echo "Executing with chunk size $j"
-    output_file="results/qatar/time_dyn_cs_${j}.txt"
+    output_file="results/djibouti/time_dyn_cs_${j}.txt"
     
     # Iterate over the values of $i for ./bin/tspg_par_native_dyn
     for ((i = 2; i <= 64; i *= 2)) 

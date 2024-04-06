@@ -81,6 +81,7 @@ public:
                     evolve_chunk(chunk_size);
                 }
                 STOP(start_worker, elapsed);
+                unique_lock chunk_lock(m);
                 time_loads[i] = elapsed;
             });
         }

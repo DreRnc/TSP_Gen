@@ -1,0 +1,66 @@
+----- Recording run times -----
+Number of workers: 1
+Initialization time: 16891
+Selection average time: 75405 +- 928.35
+Crossover average time: 12960 +- 276.868
+Mutation average time: 188 +- 6.40312
+Evaluation average time: 343 +- 0
+Merge average time: 4256 +- 1383.28
+
+Total time: 952819
+
+----- Recording run times -----
+Number of workers: 1
+Initialization time: 16750
+Selection average time: 75258 +- 739.436
+Crossover average time: 12943 +- 248.185
+Mutation average time: 181 +- 2.64575
+Evaluation average time: 342 +- 0
+Merge average time: 3991 +- 1230.71
+
+Total time: 947726
+
+----- Recording run times -----
+Number of workers: 1
+Initialization time: 17144
+Selection average time: 75182 +- 930.166
+Crossover average time: 12930 +- 240.99
+Mutation average time: 181 +- 4.3589
+Evaluation average time: 342 +- 0
+Merge average time: 3963 +- 1197.89
+
+Total time: 946905
+
+----- Recording run times -----
+Number of workers: 1
+Initialization time: 18012
+Selection average time: 75203 +- 868.473
+Crossover average time: 12941 +- 245.532
+Mutation average time: 181 +- 3.4641
+Evaluation average time: 343 +- 2
+Merge average time: 4004 +- 1262.15
+
+Total time: 948601
+
+----- Recording run times -----
+Number of workers: 1
+Initialization time: 17478
+Selection average time: 75888 +- 817.199
+Crossover average time: 12999 +- 328.268
+Mutation average time: 201 +- 12.7279
+Evaluation average time: 344 +- 1
+Merge average time: 4327 +- 1436.65
+
+Total time: 959443
+
+----- Recording run times -----
+Number of workers: 1
+Initialization time: 16821
+Selection average time: 75422 +- 806.365
+Crossover average time: 12976 +- 282.715
+Mutation average time: 187 +- 8.48528
+Evaluation average time: 343 +- 1
+Merge average time: 4268 +- 1461.38
+
+Total time: 953155
+

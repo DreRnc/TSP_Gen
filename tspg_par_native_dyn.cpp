@@ -18,8 +18,6 @@ using Matrix = vector<vector<double>>;
 unsigned int seed = 42;
 mt19937 gen(seed);
 
-long non_serial_time, serial_time;
-
 class DynamicChunks {
 public:
     DynamicChunks() {}
@@ -94,18 +92,21 @@ public:
         merge(population, offspring);
         STOP(start, serial_time);
 
-        timer.recordNonSerialTime(non_serial_time);
-        timer.recordSerialTime(serial_time);
+        times[0] = non_serial_time;
+        times[1] = serial_time;
     }
 
     void run() {
         load_balancing_stats.clear();
         time_loads.resize(num_workers);
+        times.resize(2);
         timer.reset();
         START(start_total);
 
         for (int i = 0; i < num_generations; i++) {
             evolve();
+            timer.recordNonSerialTime(times[0]);
+            timer.recordSerialTime(times[1]);
         }
 
         STOP(start_total, total_time);
@@ -127,6 +128,7 @@ private:
     int num_parents;
     int population_size;
     int num_generations;
+    vector<long> times;
     vector<Individual> population;
     vector<Individual> offspring;
     GeneticTimer& timer;
@@ -151,13 +153,13 @@ private:
     }
 
     void worker_function(DynamicChunks& task_pool, long& worker_time) {
-        START(start);
+        START(start_worker);
         while (true) {
             int chunk_size = task_pool.get_ticket();
             if (chunk_size == -1) break;
             evolve_chunk(chunk_size);
         }
-        STOP(start, elapsed);
+        STOP(start_worker, elapsed);
         worker_time = elapsed;
     }
 };

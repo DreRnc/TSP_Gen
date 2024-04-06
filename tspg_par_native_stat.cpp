@@ -17,8 +17,6 @@ using Matrix = vector<vector<double>>;
 unsigned int seed = 42;
 mt19937 gen(seed);
 
-long non_serial_time, serial_time;
-
 class TSPGenParNative {
 public:
     TSPGenParNative(int route_length, const Matrix& distance_matrix, int population_size, int num_generations, int num_parents, GeneticTimer& timer, int num_workers)
@@ -52,18 +50,22 @@ public:
 
         merge(population, offspring);
         STOP(start, serial_time)
-        timer.recordNonSerialTime(non_serial_time);
-        timer.recordSerialTime(serial_time);
+        
+        times[0] = non_serial_time;
+        times[1] = serial_time;
     }
 
     void run() {
         load_balancing_stats.clear();
         time_loads.resize(num_workers);
+        times.resize(2);
         timer.reset();
         START(start_total)
 
         for (int i = 0; i < num_generations; i++) {
             evolve();
+            timer.recordNonSerialTime(times[0]);
+            timer.recordSerialTime(times[1]);
         }
 
         STOP(start_total, total_time);
@@ -85,6 +87,7 @@ private:
     int num_parents;
     int population_size;
     int num_generations;
+    vector<long> times;
     vector<Individual> population;
     vector<Individual> offspring;
     GeneticTimer& timer;
@@ -94,7 +97,7 @@ private:
     mutex m;
 
     void evolve_chunk(int i){
-        START(start);
+        START(start_worker);
         int chunk_size = num_parents / num_workers;
         int size = (i == (num_workers-1) ? (num_parents - chunk_size*i) : (chunk_size));
 
@@ -110,7 +113,7 @@ private:
         unique_lock chunk_lock(m);
         offspring.insert(offspring.end(), chunk_offspring.begin(), chunk_offspring.end());
 
-        STOP(start, worker_time);
+        STOP(start_worker, worker_time);
         time_loads[i] = worker_time;
     }
 };

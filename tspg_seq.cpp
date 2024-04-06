@@ -28,7 +28,7 @@ public:
         evaluate_population(population, distance_matrix);
     }
 
-    void evolve(vector<long>& times) {
+    void evolve() {
         START(start)
 
         vector<Individual> parents = select_parents(population, num_parents, gen);
@@ -50,27 +50,19 @@ public:
         merge(population, offspring);
         STOP(start, merge_time)
         //timer.recordMergeTime();
-        times.push_back(selection_time);
-        times.push_back(crossover_time);
-        times.push_back(mutation_time);
-        times.push_back(evaluation_time);
-        times.push_back(merge_time);
+        timer.recordSelectionTime(selection_time);
+        timer.recordCrossoverTime(crossover_time);
+        timer.recordMutationTime(mutation_time);
+        timer.recordEvaluationTime(evaluation_time);
+        timer.recordMergeTime(merge_time);
     }
 
     void run() {
         START(start_total)
         timer.reset();
 
-        vector<long> times;
-
         for (int i = 0; i < num_generations; i++) {
-            evolve(times);
-            timer.recordSelectionTime(times[0]);
-            timer.recordCrossoverTime(times[1]);
-            timer.recordMutationTime(times[2]);
-            timer.recordEvaluationTime(times[3]);
-            timer.recordMergeTime(times[4]);
-            times.clear();
+            evolve();
         }
         
         STOP(start_total, total_time)
@@ -91,6 +83,7 @@ private:
     int num_parents;
     int population_size;
     int num_generations;
+    vector<long> times;
     vector<Individual> population;
     GeneticTimer& timer;
 };

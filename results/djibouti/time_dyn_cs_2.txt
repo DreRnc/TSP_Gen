@@ -1,0 +1,114 @@
+----- Recording run times -----
+Number of workers: 2
+Initialization time: 17297
+Serial average time: 10468 +- 1294.43
+Non-serial average time: 185703 +- 227.33
+Load balancing statistics: 
+Min load (averaged over generations): 185002 +- 279.415
+Max load (averaged over generations): 185067 +- 279.068
+Mean load (averaged over generations): 185034 +- 278.04
+Standard deviation of load (averaged over generations): 32 +- 25.8457
+Parallelization statistics: 
+Average load imbalance (max - mean): 33
+Total load imbalance (max - mean): 329
+Total serial time (including initialization): 121980
+Total non-serial time: 1857031
+
+Total time: 1979029
+
+Dynamic chunk size: 2
+----- Recording run times -----
+Number of workers: 4
+Initialization time: 16760
+Serial average time: 10276 +- 851.831
+Non-serial average time: 93593 +- 253.693
+Load balancing statistics: 
+Min load (averaged over generations): 92853 +- 346.704
+Max load (averaged over generations): 93019 +- 374.64
+Mean load (averaged over generations): 92938 +- 362.228
+Standard deviation of load (averaged over generations): 61 +- 18.0555
+Parallelization statistics: 
+Average load imbalance (max - mean): 81
+Total load imbalance (max - mean): 807
+Total serial time (including initialization): 119528
+Total non-serial time: 935937
+
+Total time: 1055480
+
+Dynamic chunk size: 2
+----- Recording run times -----
+Number of workers: 8
+Initialization time: 17315
+Serial average time: 11190 +- 1006.75
+Non-serial average time: 47868 +- 103.175
+Load balancing statistics: 
+Min load (averaged over generations): 46667 +- 176.434
+Max load (averaged over generations): 47071 +- 186.124
+Mean load (averaged over generations): 46881 +- 181.797
+Standard deviation of load (averaged over generations): 136 +- 18.6815
+Parallelization statistics: 
+Average load imbalance (max - mean): 190
+Total load imbalance (max - mean): 1895
+Total serial time (including initialization): 129216
+Total non-serial time: 478683
+
+Total time: 607920
+
+Dynamic chunk size: 2
+----- Recording run times -----
+Number of workers: 16
+Initialization time: 16710
+Serial average time: 13276 +- 1432.93
+Non-serial average time: 26337 +- 267.15
+Load balancing statistics: 
+Min load (averaged over generations): 24123 +- 291.801
+Max load (averaged over generations): 25034 +- 369.605
+Mean load (averaged over generations): 24604 +- 340.24
+Standard deviation of load (averaged over generations): 278 +- 24.9399
+Parallelization statistics: 
+Average load imbalance (max - mean): 430
+Total load imbalance (max - mean): 4300
+Total serial time (including initialization): 149476
+Total non-serial time: 263372
+
+Total time: 412869
+
+Dynamic chunk size: 2
+----- Recording run times -----
+Number of workers: 32
+Initialization time: 16696
+Serial average time: 13665 +- 1332.36
+Non-serial average time: 16590 +- 129.788
+Load balancing statistics: 
+Min load (averaged over generations): 12844 +- 315.249
+Max load (averaged over generations): 14690 +- 486.519
+Mean load (averaged over generations): 13768 +- 411.446
+Standard deviation of load (averaged over generations): 554 +- 58.9237
+Parallelization statistics: 
+Average load imbalance (max - mean): 922
+Total load imbalance (max - mean): 9218
+Total serial time (including initialization): 153348
+Total non-serial time: 165908
+
+Total time: 319278
+
+Dynamic chunk size: 2
+----- Recording run times -----
+Number of workers: 64
+Initialization time: 16634
+Serial average time: 12988 +- 1254.16
+Non-serial average time: 16180 +- 236.036
+Load balancing statistics: 
+Min load (averaged over generations): 8729 +- 717.731
+Max load (averaged over generations): 13646 +- 591.908
+Mean load (averaged over generations): 11475 +- 452.18
+Standard deviation of load (averaged over generations): 1370 +- 87.7268
+Parallelization statistics: 
+Average load imbalance (max - mean): 2171
+Total load imbalance (max - mean): 21702
+Total serial time (including initialization): 146514
+Total non-serial time: 161809
+
+Total time: 308343
+
+Dynamic chunk size: 2

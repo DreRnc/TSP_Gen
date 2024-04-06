@@ -1,0 +1,114 @@
+----- Recording run times -----
+Number of workers: 2
+Initialization time: 17077
+Serial average time: 10919 +- 1028.35
+Non-serial average time: 82325 +- 153.454
+Load balancing statistics: 
+Min load (averaged over generations): 81170 +- 307.625
+Max load (averaged over generations): 81271 +- 314.666
+Mean load (averaged over generations): 81220 +- 310.369
+Standard deviation of load (averaged over generations): 50 +- 23.5797
+Parallelization statistics: 
+Average load imbalance (max - mean): 51
+Total load imbalance (max - mean): 506
+Total serial time (including initialization): 126268
+Total non-serial time: 823251
+
+Total time: 949538
+
+Dynamic chunk size: 8
+----- Recording run times -----
+Number of workers: 4
+Initialization time: 16751
+Serial average time: 10142 +- 899.462
+Non-serial average time: 42178 +- 137.692
+Load balancing statistics: 
+Min load (averaged over generations): 40977 +- 277.186
+Max load (averaged over generations): 41136 +- 281.301
+Mean load (averaged over generations): 41061 +- 280.703
+Standard deviation of load (averaged over generations): 60 +- 19.2354
+Parallelization statistics: 
+Average load imbalance (max - mean): 75
+Total load imbalance (max - mean): 743
+Total serial time (including initialization): 118178
+Total non-serial time: 421786
+
+Total time: 539980
+
+Dynamic chunk size: 8
+----- Recording run times -----
+Number of workers: 8
+Initialization time: 16916
+Serial average time: 10526 +- 1195.28
+Non-serial average time: 22358 +- 156.381
+Load balancing statistics: 
+Min load (averaged over generations): 20695 +- 182.387
+Max load (averaged over generations): 21135 +- 196.023
+Mean load (averaged over generations): 20928 +- 183.864
+Standard deviation of load (averaged over generations): 150 +- 15.6525
+Parallelization statistics: 
+Average load imbalance (max - mean): 207
+Total load imbalance (max - mean): 2075
+Total serial time (including initialization): 122176
+Total non-serial time: 223589
+
+Total time: 345781
+
+Dynamic chunk size: 8
+----- Recording run times -----
+Number of workers: 16
+Initialization time: 16633
+Serial average time: 13321 +- 1139.86
+Non-serial average time: 14248 +- 269.574
+Load balancing statistics: 
+Min load (averaged over generations): 11519 +- 223.094
+Max load (averaged over generations): 12482 +- 293.712
+Mean load (averaged over generations): 12021 +- 259.172
+Standard deviation of load (averaged over generations): 288 +- 24.8395
+Parallelization statistics: 
+Average load imbalance (max - mean): 461
+Total load imbalance (max - mean): 4607
+Total serial time (including initialization): 149847
+Total non-serial time: 142489
+
+Total time: 292355
+
+Dynamic chunk size: 8
+----- Recording run times -----
+Number of workers: 32
+Initialization time: 17128
+Serial average time: 13077 +- 1230.96
+Non-serial average time: 10498 +- 240.537
+Load balancing statistics: 
+Min load (averaged over generations): 6329 +- 286.962
+Max load (averaged over generations): 8437 +- 379.739
+Mean load (averaged over generations): 7398 +- 335.915
+Standard deviation of load (averaged over generations): 614 +- 36.5377
+Parallelization statistics: 
+Average load imbalance (max - mean): 1039
+Total load imbalance (max - mean): 10385
+Total serial time (including initialization): 147901
+Total non-serial time: 104986
+
+Total time: 252912
+
+Dynamic chunk size: 8
+----- Recording run times -----
+Number of workers: 64
+Initialization time: 16792
+Serial average time: 11676 +- 1268.53
+Non-serial average time: 10546 +- 328.553
+Load balancing statistics: 
+Min load (averaged over generations): 2668 +- 636.726
+Max load (averaged over generations): 7972 +- 744.184
+Mean load (averaged over generations): 5572 +- 656.37
+Standard deviation of load (averaged over generations): 1520 +- 159.859
+Parallelization statistics: 
+Average load imbalance (max - mean): 2400
+Total load imbalance (max - mean): 23999
+Total serial time (including initialization): 133555
+Total non-serial time: 105467
+
+Total time: 239045
+
+Dynamic chunk size: 8

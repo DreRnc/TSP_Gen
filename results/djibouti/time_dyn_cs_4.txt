@@ -1,0 +1,114 @@
+----- Recording run times -----
+Number of workers: 2
+Initialization time: 17713
+Serial average time: 10660 +- 1144.01
+Non-serial average time: 117035 +- 193.933
+Load balancing statistics: 
+Min load (averaged over generations): 115825 +- 424.989
+Max load (averaged over generations): 115905 +- 453.769
+Mean load (averaged over generations): 115865 +- 438.665
+Standard deviation of load (averaged over generations): 40 +- 27.4955
+Parallelization statistics: 
+Average load imbalance (max - mean): 40
+Total load imbalance (max - mean): 405
+Total serial time (including initialization): 124316
+Total non-serial time: 1170352
+
+Total time: 1294687
+
+Dynamic chunk size: 4
+----- Recording run times -----
+Number of workers: 4
+Initialization time: 16653
+Serial average time: 10341 +- 877.418
+Non-serial average time: 59893 +- 329.538
+Load balancing statistics: 
+Min load (averaged over generations): 58596 +- 253.014
+Max load (averaged over generations): 58755 +- 259.042
+Mean load (averaged over generations): 58674 +- 263.253
+Standard deviation of load (averaged over generations): 61 +- 14.5945
+Parallelization statistics: 
+Average load imbalance (max - mean): 81
+Total load imbalance (max - mean): 802
+Total serial time (including initialization): 120071
+Total non-serial time: 598936
+
+Total time: 719023
+
+Dynamic chunk size: 4
+----- Recording run times -----
+Number of workers: 8
+Initialization time: 16895
+Serial average time: 11165 +- 1272.32
+Non-serial average time: 31378 +- 378.613
+Load balancing statistics: 
+Min load (averaged over generations): 29433 +- 277.809
+Max load (averaged over generations): 29866 +- 262.892
+Mean load (averaged over generations): 29663 +- 267.914
+Standard deviation of load (averaged over generations): 143 +- 20.4695
+Parallelization statistics: 
+Average load imbalance (max - mean): 203
+Total load imbalance (max - mean): 2032
+Total serial time (including initialization): 128547
+Total non-serial time: 313788
+
+Total time: 442353
+
+Dynamic chunk size: 4
+----- Recording run times -----
+Number of workers: 16
+Initialization time: 16527
+Serial average time: 12866 +- 1733.49
+Non-serial average time: 18941 +- 374.48
+Load balancing statistics: 
+Min load (averaged over generations): 15720 +- 240.237
+Max load (averaged over generations): 16674 +- 311.642
+Mean load (averaged over generations): 16238 +- 258.575
+Standard deviation of load (averaged over generations): 299 +- 46.4973
+Parallelization statistics: 
+Average load imbalance (max - mean): 436
+Total load imbalance (max - mean): 4364
+Total serial time (including initialization): 145195
+Total non-serial time: 189419
+
+Total time: 334631
+
+Dynamic chunk size: 4
+----- Recording run times -----
+Number of workers: 32
+Initialization time: 17087
+Serial average time: 13915 +- 1277.15
+Non-serial average time: 13126 +- 310.707
+Load balancing statistics: 
+Min load (averaged over generations): 8495 +- 317.175
+Max load (averaged over generations): 10472 +- 437.457
+Mean load (averaged over generations): 9493 +- 378.913
+Standard deviation of load (averaged over generations): 593 +- 34.7994
+Parallelization statistics: 
+Average load imbalance (max - mean): 979
+Total load imbalance (max - mean): 9792
+Total serial time (including initialization): 156246
+Total non-serial time: 131267
+
+Total time: 287537
+
+Dynamic chunk size: 4
+----- Recording run times -----
+Number of workers: 64
+Initialization time: 17185
+Serial average time: 14127 +- 2307.05
+Non-serial average time: 13047 +- 191.139
+Load balancing statistics: 
+Min load (averaged over generations): 3932 +- 1116.08
+Max load (averaged over generations): 9899 +- 698.978
+Mean load (averaged over generations): 7429 +- 626.133
+Standard deviation of load (averaged over generations): 1606 +- 135.879
+Parallelization statistics: 
+Average load imbalance (max - mean): 2470
+Total load imbalance (max - mean): 24702
+Total serial time (including initialization): 158462
+Total non-serial time: 130474
+
+Total time: 288964
+
+Dynamic chunk size: 4

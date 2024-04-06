@@ -1,0 +1,42 @@
+----- Recording run times -----
+Number of workers: 1
+Initialization time: 341910
+
+Total time: 85590297
+
+----- Recording run times -----
+Number of workers: 2
+Initialization time: 341419
+
+Total time: 44061323
+
+----- Recording run times -----
+Number of workers: 4
+Initialization time: 339776
+
+Total time: 23089242
+
+----- Recording run times -----
+Number of workers: 8
+Initialization time: 329336
+
+Total time: 12587519
+
+----- Recording run times -----
+Number of workers: 16
+Initialization time: 329133
+
+Total time: 6900850
+
+----- Recording run times -----
+Number of workers: 32
+Initialization time: 329113
+
+Total time: 4832058
+
+----- Recording run times -----
+Number of workers: 64
+Initialization time: 328811
+
+Total time: 4598989
+

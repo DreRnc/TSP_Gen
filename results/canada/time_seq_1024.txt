@@ -1,0 +1,11 @@
+----- Recording run times -----
+Number of workers: 1
+Initialization time: 342945
+Selection average time: 4781 +- 2393.46
+Crossover average time: 8.44756e+06 +- 84508.3
+Mutation average time: 105 +- 133.578
+Evaluation average time: 49884 +- 11428.6
+Merge average time: 14845 +- 7745.5
+
+Total time: 85519984
+

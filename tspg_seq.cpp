@@ -14,7 +14,6 @@ using Matrix = vector<vector<double>>;
 unsigned int seed = 42;
 mt19937 gen(seed);
 
-// If this slowes down, put it in the class and push into vector such as in dyn version
 long selection_time, crossover_time, mutation_time, evaluation_time, merge_time, non_serial_time;
 
 class TSPGenSeq {
@@ -33,23 +32,18 @@ public:
 
         vector<Individual> parents = select_parents(population, num_parents, gen);
         STOP(start, selection_time)
-        //timer.recordSelectionTime();
 
         vector<Individual> offspring = crossover_population(parents, gen);
         STOP(start, crossover_time)
-        //timer.recordCrossoverTime();
 
         mutate(offspring, gen);
         STOP(start, mutation_time)
-        //timer.recordMutationTime();
 
         evaluate_population(offspring, distance_matrix);
         STOP(start, evaluation_time)
-        //timer.recordEvaluationTime();
 
         merge(population, offspring);
         STOP(start, merge_time)
-        //timer.recordMergeTime();
         timer.recordSelectionTime(selection_time);
         timer.recordCrossoverTime(crossover_time);
         timer.recordMutationTime(mutation_time);

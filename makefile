@@ -1,11 +1,8 @@
-# Compiler
 CXX = g++
-# Compiler flags
 CXXFLAGS = -std=c++20 -O3
 
 all: bin/tspg_seq bin/tspg_par_native_stat bin/tspg_par_native_dyn bin/tspg_par_ff
 
-# Compiling source files
 obj/distancefuncs.o: src/distancefuncs.cpp src/distancefuncs.hpp
 	mkdir -p obj
 	$(CXX) $(CXXFLAGS) -c $< -o $@
@@ -34,7 +31,6 @@ obj/tspg_par_ff.o: tspg_par_ff.cpp src/distancefuncs.hpp src/geneticfuncs.hpp sr
 	mkdir -p obj
 	$(CXX) $(CXXFLAGS) -c $< -I/usr/local/include -L/usr/local/libs -lfastflow -o $@
 
-# Linking
 bin/tspg_seq: obj/tspg_seq.o obj/distancefuncs.o obj/geneticfuncs.o obj/utilfuncs.o
 	mkdir -p bin
 	$(CXX) $(CXXFLAGS) $^ -o $@ -pthread
@@ -51,7 +47,6 @@ bin/tspg_par_ff: obj/tspg_par_ff.o obj/distancefuncs.o obj/geneticfuncs.o obj/ut
 	mkdir -p bin
 	$(CXX) $(CXXFLAGS) $^ -o $@ -pthread
 
-# Clean
 clean:
 	rm -rf obj bin
 

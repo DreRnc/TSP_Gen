@@ -1,4 +1,4 @@
------ Recording run times -----
+---- Recording run times -----
 Number of workers: 2
 Initialization time: 17297
 Serial average time: 10468 +- 1294.43
@@ -12,7 +12,7 @@ Parallelization statistics:
 Average load imbalance (max - mean): 33
 Total load imbalance (max - mean): 329
 Total serial time (including initialization): 121980
-Total non-serial time: 1857031
+Total non-serial time: 1-857031
 
 Total time: 1979029
 

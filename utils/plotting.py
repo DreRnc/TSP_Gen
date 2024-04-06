@@ -378,6 +378,49 @@ def plot_overhead_decomposition(country, size, num_worker, n_gen=10):
     # Show the plot
     plt.show()
 
+def plot_speedup_different_chunksizes(country, sizes):
+    """---- Recording run times -----
+Number of workers: 2
+Initialization time: 17297
+Serial average time: 10468 +- 1294.43
+Non-serial average time: 185703 +- 227.33
+Load balancing statistics: 
+Min load (averaged over generations): 185002 +- 279.415
+Max load (averaged over generations): 185067 +- 279.068
+Mean load (averaged over generations): 185034 +- 278.04
+Standard deviation of load (averaged over generations): 32 +- 25.8457
+Parallelization statistics: 
+Average load imbalance (max - mean): 33
+Total load imbalance (max - mean): 329
+Total serial time (including initialization): 121980
+Total non-serial time: 1-857031
+
+Total time: 1979029
+
+Dynamic chunk size: 2
+
+    Sizes is a vector of 3 elements"""
+
+    for size in sizes:
+        # Read dynamic times for that chunk_size
+        dyn_num_workers, dyn_total_times = read_times(path + f'/results/{country}/time_dyn_cs_{size}.txt')
+        # Calculate speedup for dynamic parallelism
+        dyn_speedup = [dyn_total_times[0] / time for time in dyn_total_times]
+        plt.plot(dyn_num_workers, dyn_speedup, marker='o', label=f'Dynamic Parallelism - Chunk Size {size}')
+
+    # Plot the diagonal
+    max_workers = max(dyn_num_workers)
+    plt.plot(range(max_workers + 1), range(max_workers + 1), linestyle='--', color='r', label='Ideal Speedup (x=y)')
+    plt.plot(dyn_num_workers, y, linestyle='--', color='g', label='Amdahl\'s Ideal Speedup')
+
+    plt.xlabel('Number of Workers')
+    plt.ylabel('Speedup')
+    plt.title(f'Speedup vs. Number of Workers - {country.capitalize()} (Different Chunk Sizes)')
+    plt.legend()
+
+    
+
+
 
 path = os.getcwd()
 countries = ['canada']
@@ -441,6 +484,7 @@ def plot_law():
     plt.xticks(x[-2:], labels=x[-2:])
     plt.savefig(path + '/images/amdahl_law.png')
     plt.show()
+
 plot_law()
 
 

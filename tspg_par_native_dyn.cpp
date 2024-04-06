@@ -72,12 +72,17 @@ public:
         thread tids[num_workers];
         fill(time_loads.begin(), time_loads.end(), 0);
 
-        auto thread_body = [&](int i) {
-            worker_function(task_pool, time_loads[i]); 
-        };
-
         for(int i=0; i<num_workers; i++){
-            tids[i] = thread(thread_body, i);
+            tids[i] = thread([&, i](){
+                START(start_worker);
+                while (true) {
+                    int chunk_size = task_pool.get_ticket();
+                    if (chunk_size == -1) break;
+                    evolve_chunk(chunk_size);
+                }
+                STOP(start_worker, elapsed);
+                time_loads[i] = elapsed;
+            });
         }
 
         for(int i=0; i<num_workers; i++){
@@ -150,17 +155,6 @@ private:
         // Lock when pushing in the global vector of offsrping and timings
         unique_lock chunk_lock(m);
         offspring.insert(offspring.end(), chunk_offspring.begin(), chunk_offspring.end());
-    }
-
-    void worker_function(DynamicChunks& task_pool, long& worker_time) {
-        START(start_worker);
-        while (true) {
-            int chunk_size = task_pool.get_ticket();
-            if (chunk_size == -1) break;
-            evolve_chunk(chunk_size);
-        }
-        STOP(start_worker, elapsed);
-        worker_time = elapsed;
     }
 };
 

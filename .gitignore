@@ -2,7 +2,6 @@ data
 .DS_Store
 .vscode
 obj
-bin
 images
 .venv
 fastflow

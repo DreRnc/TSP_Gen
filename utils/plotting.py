@@ -116,7 +116,7 @@ def plot_load_imbalance(country, size, mode = 'perc', max_y = None):
 
     plt.xlabel('Number of Workers')
     plt.ylabel(f'Load Imbalance ({mode_name})')
-    plt.title(f'Load Imbalance vs. Number of Workers - {country.capitalize()} ({size})')
+    plt.title(f'Load Imbalance vs. Number of Workers - {country.capitalize()} ({int(size)*2})')
     plt.legend()
 
     plt.xticks([0.2, 1.2], labels=['2', f"{max(stat_num_workers)}"])
@@ -162,7 +162,7 @@ def plot_speedup(country, size):
     
     plt.xlabel('Number of Workers')
     plt.ylabel('Speedup')
-    plt.title(f'Speedup vs. Number of Workers - {country.capitalize()} ({size})')
+    plt.title(f'Speedup vs. Number of Workers - {country.capitalize()} ({int(size)*2})')
     plt.legend()
     
     
@@ -200,7 +200,7 @@ def plot_scalability(country, size):
 
     plt.xlabel('Number of Workers')
     plt.ylabel('Scalability')
-    plt.title(f'Scalability vs. Number of Workers - {country.capitalize()} ({size})')
+    plt.title(f'Scalability vs. Number of Workers - {country.capitalize()} ({int(size) *2})')
     plt.legend()
 
 
@@ -247,7 +247,7 @@ def plot_efficiency(country, size):
 
     plt.xlabel('Number of Workers')
     plt.ylabel('Efficiency')
-    plt.title(f'Efficiency vs. Number of Workers - {country.capitalize()} ({size})')
+    plt.title(f'Efficiency vs. Number of Workers - {country.capitalize()} ({int(size) * 2})')
     plt.legend()
 
 
@@ -285,7 +285,7 @@ def plot_serial_fraction_dyn(country, size):
 
     plt.xlabel('Number of Workers')
     plt.ylabel('Percentage of Time')
-    plt.title(f'Serial Fraction vs. Number of Workers - {country.capitalize()} ({size})')
+    plt.title(f'Serial Fraction vs. Number of Workers - {country.capitalize()} ({int(size)*2})')
     plt.legend()
 
 
@@ -341,7 +341,7 @@ def plot_overhead_decomposition(country, size, num_worker, n_gen=10):
 
     plt.xlabel('Parallelism Type')
     plt.ylabel('Time (usecs)')
-    plt.title(f'Difference from Ideal Time Decomposition - {country.capitalize()} ({size})')
+    plt.title(f'Difference from Ideal Time Decomposition - {country.capitalize()} ({int(size)*2})')
 
 
     plt.xticks([0, 1], labels=['Static \nParallelism', 'Dynamic \nParallelism'])
